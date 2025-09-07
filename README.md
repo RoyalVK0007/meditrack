@@ -137,7 +137,7 @@ meditrack-hospital/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/meditrack-hospital.git
+   git clone https://github.com/RoyalVK0007/meditrack.git
    cd meditrack-hospital
    ```
 
@@ -193,9 +193,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/meditrack-hospital/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/meditrack-hospital/discussions)
-- **Documentation**: [Wiki](https://github.com/yourusername/meditrack-hospital/wiki)
+- **Issues**: [GitHub Issues](https://github.com/RoyalVK0007/meditrack/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/RoyalVK0007/meditrack/discussions)
+- **Documentation**: [Wiki](https://github.com/RoyalVK0007/meditrack/wiki)
 
 ## ⚠️ Disclaimer
 
