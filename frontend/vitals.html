@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitals - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">Nurse</span> | <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="patients.html">👥 Patients</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <h2>Vital Signs Monitoring</h2>
+            <div class="vitals-form">
+                <select id="vitalPatientSelect">
+                    <option value="">Select Patient</option>
+                </select>
+                <input type="number" id="heartRate" placeholder="Heart Rate (bpm)">
+                <input type="text" id="bloodPressure" placeholder="Blood Pressure (120/80)">
+                <input type="number" id="temperature" placeholder="Temperature (°F)" step="0.1">
+                <input type="number" id="oxygenLevel" placeholder="Oxygen Level (%)">
+                <button onclick="addVital()" class="btn-primary">Record Vitals</button>
+            </div>
+            <div id="vitalsHistory"></div>
+            <div class="chart-container" id="vitalsChartContainer" style="display:none;">
+                <canvas id="patientVitalsChart"></canvas>
+            </div>
+        </main>
+    </div>
+    <script src="common.js"></script>
+    <script src="vitals.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billing - MediTrack</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏥 MediTrack Hospital System</h1>
+        <div class="user-info">
+          <span id="userRole">Receptionist</span> |
+          <a href="#" onclick="logout()">Logout</a>
+        </div>
+      </header>
+
+      <nav class="sidebar">
+        <ul>
+          <li><a href="dashboard.html">📊 Dashboard</a></li>
+          <li><a href="patients.html">👥 Patients</a></li>
+        </ul>
+      </nav>
+
+      <main class="content page-content">
+        <h2>Billing & Payments</h2>
+        <div class="controls">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search bills..." onkeyup="filterBills()">
+            <button onclick="clearSearch()" class="btn-clear">×</button>
+          </div>
+          <div class="sort-dropdown">
+            <button class="btn-secondary dropdown-btn" onclick="toggleSortDropdown()">Sort By <span class="dropdown-arrow">▼</span></button>
+            <div class="dropdown-content" id="sortDropdown">
+              <a href="#" onclick="sortTable('bill_id')">By Bill ID</a>
+              <a href="#" onclick="sortTable('patient_id')">By Patient</a>
+              <a href="#" onclick="sortTable('status')">By Status</a>
+            </div>
+          </div>
+          <button onclick="showAuditLog()" class="btn-audit">📅 Audit Log</button>
+        </div>
+        <div class="table-container">
+          <table id="billingTable">
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Patient</th>
+                <th>Room Charges</th>
+                <th>Medicine</th>
+                <th>Doctor Fee</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <div id="auditLogModal" class="modal">
+      <div class="modal-content audit-modal">
+        <span class="close" onclick="closeAuditModal()">&times;</span>
+        <h3>📅 Billing Audit Log</h3>
+        <p class="audit-subtitle">Recent billing operations (last 10 entries)</p>
+        <div id="auditLogContent"></div>
+      </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="billing.js"></script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">User</span> | <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="patients.html">👥 Patients</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <div id="aboutContent"></div>
+        </main>
+    </div>
+    <script src="common.js"></script>
+    <script src="about.js"></script>
+</body>
+</html>

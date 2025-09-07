@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">Doctor</span> | <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="dashboard.html" class="active">📊 Dashboard</a></li>
+                <li><a href="patients.html">👥 Patients</a></li>
+                <li><a href="vitals.html">💓 Vitals</a></li>
+                <li><a href="medications.html">💊 Medications</a></li>
+                <li><a href="billing.html">💰 Billing</a></li>
+                <li><a href="reports.html">📋 Reports</a></li>
+                <li><a href="admin.html">⚙️ Admin</a></li>
+                <li><a href="about.html">📝 About</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <h2>Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <span id="totalPatients">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Admitted Today</h3>
+                    <span id="admittedToday">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Critical Alerts</h3>
+                    <span id="criticalAlerts">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Bills</h3>
+                    <span id="pendingBills">0</span>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <canvas id="vitalsChart"></canvas>
+                    <div class="info-card emergency-contacts">
+                        <h4>🆘 Emergency Contacts</h4>
+                        <div class="contact-grid">
+                            <div class="contact-item">
+                                <span class="contact-icon">🚑</span>
+                                <div>
+                                    <strong>Ambulance</strong><br>
+                                    <a href="tel:108">108</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">🔥</span>
+                                <div>
+                                    <strong>Fire Brigade</strong><br>
+                                    <a href="tel:101">101</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">👮</span>
+                                <div>
+                                    <strong>Police</strong><br>
+                                    <a href="tel:100">100</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">⚕️</span>
+                                <div>
+                                    <strong>Poison Control</strong><br>
+                                    <a href="tel:1066">1066</a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="fire-alarm-btn" onclick="triggerFireAlarm()">
+                            🚨 FIRE ALARM 🚨
+                        </button>
+                    </div>
+                </div>
+                <div class="hospital-info">
+                    <h3>🏥 About MediTrack General Hospital</h3>
+                    <div class="info-card">
+                        <h4>📍 Location & Contact</h4>
+                        <p><strong>Address:</strong> 123 Healthcare Avenue, Medical District<br>
+                        Mumbai, Maharashtra 400001</p>
+                        <p><strong>Phone:</strong> +91-22-1234-5678<br>
+                        <strong>Email:</strong> info@meditrack.com</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>🩺 Services</h4>
+                        <ul>
+                            <li>Emergency Care 24/7</li>
+                            <li>General Medicine</li>
+                            <li>Cardiology</li>
+                            <li>Surgery</li>
+                            <li>Pediatrics</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>⏰ Operating Hours</h4>
+                        <p><strong>Emergency:</strong> 24/7<br>
+                        <strong>OPD:</strong> 8:00 AM - 8:00 PM<br>
+                        <strong>Visiting:</strong> 4:00 PM - 6:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="common.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

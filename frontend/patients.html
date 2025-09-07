@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">Doctor</span> | <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="patients.html" class="active">👥 Patients</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <h2>Patient Management</h2>
+            <div class="controls">
+                <button onclick="showAddPatientForm()" class="btn-primary">+ Add New Patient</button>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search patients..." onkeyup="filterPatients()">
+                    <button onclick="clearSearch()" class="btn-clear">×</button>
+                </div>
+                <div class="sort-dropdown">
+                    <button class="btn-secondary dropdown-btn" onclick="toggleSortDropdown()">Sort By <span class="dropdown-arrow">▼</span></button>
+                    <div class="dropdown-content" id="sortDropdown">
+                        <a href="#" onclick="sortTable('patient_id')">By ID</a>
+                        <a href="#" onclick="sortTable('name')">By Name</a>
+                        <a href="#" onclick="sortTable('status')">By Status</a>
+                    </div>
+                </div>
+                <button onclick="showAuditLog()" class="btn-audit">📅 Audit Log</button>
+            </div>
+            <div class="table-container">
+                <table id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="addPatientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Add New Patient</h3>
+            <form id="patientForm">
+                <input type="hidden" id="patientId">
+                <input type="text" id="patientName" placeholder="Full Name" required minlength="2" maxlength="100">
+                <span class="error-msg" id="nameError"></span>
+                <input type="number" id="patientAge" placeholder="Age" required min="1" max="120">
+                <span class="error-msg" id="ageError"></span>
+                <select id="patientGender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span class="error-msg" id="genderError"></span>
+                <input type="tel" id="patientContact" placeholder="Contact Number" required pattern="[0-9]{10}" maxlength="10">
+                <span class="error-msg" id="contactError"></span>
+                <textarea id="patientAddress" placeholder="Address" required minlength="10" maxlength="200"></textarea>
+                <span class="error-msg" id="addressError"></span>
+                <button type="submit" class="btn-primary" id="submitBtn">Add Patient</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="viewPatientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeViewModal()">&times;</span>
+            <h3>Patient Details</h3>
+            <div id="viewPatientDetails"></div>
+        </div>
+    </div>
+
+    <div id="auditLogModal" class="modal">
+        <div class="modal-content audit-modal">
+            <span class="close" onclick="closeAuditModal()">&times;</span>
+            <h3>📅 Patient Audit Log</h3>
+            <p class="audit-subtitle">Recent patient operations (last 10 entries)</p>
+            <div id="auditLogContent"></div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="patients.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">Admin</span> | <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="patients.html">👥 Patients</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <h2>🔐 System Administration</h2>
+            
+            <div class="admin-card">
+                <h3>📊 Database Management</h3>
+                <div class="admin-actions">
+                    <button onclick="seedDemoData()" class="btn-primary">Seed Demo Data</button>
+                    <button onclick="backupDatabase()" class="btn-secondary">Backup Database</button>
+                    <button onclick="clearAllData()" class="btn-danger">Clear All Data</button>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3>👥 User Management</h3>
+                <div class="admin-actions">
+                    <button onclick="showAddUserForm()" class="btn-primary">Add New User</button>
+                    <button onclick="loadUsers()" class="btn-secondary">View All Users</button>
+                </div>
+                <div class="table-container" id="usersTableContainer" style="display:none;">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Username</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3>📈 System Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Patients:</span>
+                        <span class="stat-value" id="adminTotalPatients">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Active Users:</span>
+                        <span class="stat-value" id="adminActiveUsers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Database Size:</span>
+                        <span class="stat-value" id="adminDbSize">0 MB</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Backup:</span>
+                        <span class="stat-value" id="adminLastBackup">Never</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminStatus"></div>
+        </main>
+    </div>
+
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUserModal()">&times;</span>
+            <h3>Add New User</h3>
+            <form id="addUserForm">
+                <input type="text" id="userName" placeholder="Full Name" required>
+                <input type="text" id="userUsername" placeholder="Username" required>
+                <input type="password" id="userPassword" placeholder="Password" required>
+                <select id="userRole" required>
+                    <option value="">Select Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="nurse">Nurse</option>
+                    <option value="receptionist">Receptionist</option>
+                </select>
+                <button type="submit" class="btn-primary">Add User</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
