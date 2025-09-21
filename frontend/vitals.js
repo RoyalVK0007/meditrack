@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadPatients() {
     try {
-        const response = await fetch('/api/patients');
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/patients', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         patients = await response.json();
         
         const select = document.getElementById('vitalPatientSelect');
@@ -45,9 +48,13 @@ async function addVital() {
     };
     
     try {
+        const token = localStorage.getItem('jwtToken');
         const response = await fetch('/api/vitals', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify(vitalData)
         });
         
@@ -71,7 +78,10 @@ async function loadVitalsHistory(patientId) {
     if (!patientId) return;
     
     try {
-        const response = await fetch(`/api/vitals/${patientId}`);
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`/api/vitals/${patientId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const vitalsData = await response.json();
         
         const historyDiv = document.getElementById('vitalsHistory');

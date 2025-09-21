@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🏥 MediTrack</h1>
+                <p>Hospital Management System</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+            
+            <div class="demo-accounts">
+                <h4>Demo Accounts:</h4>
+                <p><strong>Admin:</strong> admin / password123</p>
+                <p><strong>Doctor:</strong> doctor1 / password123</p>
+                <p><strong>Nurse:</strong> nurse1 / password123</p>
+                <p><strong>Reception:</strong> reception1 / password123</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="login.js"></script>
+</body>
+</html>

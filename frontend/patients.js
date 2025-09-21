@@ -53,7 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadPatients() {
     try {
-        const response = await fetch('/api/patients');
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/patients', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         patients = await response.json();
         
         const tbody = document.querySelector('#patientsTable tbody');
@@ -248,8 +251,10 @@ function editPatient(patientId) {
 
 function deletePatient(patientId) {
     if (confirm('Are you sure you want to delete this patient? This action cannot be undone.')) {
+        const token = localStorage.getItem('jwtToken');
         fetch(`/api/patients/${patientId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
         })
         .then(response => {
             if (response.ok) {

@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadBilling() {
     try {
-        const response = await fetch('/api/billing');
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/billing', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         bills = await response.json();
         
         const tbody = document.querySelector('#billingTable tbody');

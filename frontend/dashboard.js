@@ -5,14 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadDashboard() {
     try {
-        const response = await fetch('/api/patients');
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/patients', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const patientsData = await response.json();
         
         document.getElementById('totalPatients').textContent = patientsData.length;
         document.getElementById('admittedToday').textContent = 
             patientsData.filter(p => p.status === 'Admitted').length;
         
-        const billsResponse = await fetch('/api/billing');
+        const billsResponse = await fetch('/api/billing', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const billsData = await billsResponse.json();
         document.getElementById('pendingBills').textContent = 
             billsData.filter(b => b.status === 'Pending').length;
@@ -28,7 +33,10 @@ async function loadDashboard() {
 
 async function createVitalsChart() {
     try {
-        const response = await fetch('/api/vitals/all');
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/vitals/all', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const vitalsData = await response.json();
         
         const ctx = document.getElementById('vitalsChart').getContext('2d');

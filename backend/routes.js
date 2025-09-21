@@ -211,7 +211,13 @@ async function clearAllData(req, res) {
 
 // Update patient
 async function updatePatient(req, res) {
-  const patientId = req.url.split('/')[3];
+  const patientId = parseInt(req.url.split('/')[3]);
+  if (!patientId || patientId <= 0) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid patient ID" }));
+    return;
+  }
+  
   let body = "";
   req.on("data", chunk => { body += chunk.toString(); });
   req.on("end", async () => {
@@ -232,7 +238,13 @@ async function updatePatient(req, res) {
 
 // Delete patient
 async function deletePatient(req, res) {
-  const patientId = req.url.split('/')[3];
+  const patientId = parseInt(req.url.split('/')[3]);
+  if (!patientId || patientId <= 0) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid patient ID" }));
+    return;
+  }
+  
   try {
     await pool.query("DELETE FROM patients WHERE patient_id = ?", [patientId]);
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -254,5 +266,7 @@ async function getAllVitals(req, res) {
     res.end(JSON.stringify({ error: err.message }));
   }
 }
+
+
 
 module.exports = { getPatients, addPatient, updatePatient, deletePatient, getVitals, addVital, getAllVitals, getBills, seedDemoData, generateBillPDF, clearAllData };

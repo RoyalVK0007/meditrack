@@ -8,9 +8,11 @@
     "test": "echo \"No tests specified\""
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.3",
-    "xlsx": "^0.18.5",
-    "pdfkit": "^0.13.0"
+    "pdfkit": "^0.13.0",
+    "xlsx": "^0.18.5"
   },
   "author": "MediTrack Development Team",
   "license": "MIT",

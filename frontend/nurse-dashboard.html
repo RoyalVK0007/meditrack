@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurse Dashboard - MediTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 MediTrack Hospital System</h1>
+            <div class="user-info">
+                <span id="userRole">Nurse</span> | <button id="logoutBtn" class="btn-logout">Logout</button>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="nurse-dashboard.html" class="active">📊 Dashboard</a></li>
+                <li><a href="patients.html">👥 Patients</a></li>
+                <li><a href="vitals.html">💓 Vitals</a></li>
+                <li><a href="medications.html">💊 Medications</a></li>
+            </ul>
+        </nav>
+
+        <main class="content page-content">
+            <h2>Nurse Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Assigned Patients</h3>
+                    <span id="assignedPatients">18</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Vitals Due</h3>
+                    <span id="vitalsDue">5</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Medications Due</h3>
+                    <span id="medicationsDue">7</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Shift Hours</h3>
+                    <span id="shiftHours">6/8</span>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="auth.js"></script>
+    <script src="common.js"></script>
+    <script>
+        restrictAccess(['nurse']);
+    </script>
+</body>
+</html>

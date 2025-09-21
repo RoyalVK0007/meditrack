@@ -11,7 +11,7 @@
         <header>
             <h1>🏥 MediTrack Hospital System</h1>
             <div class="user-info">
-                <span id="userRole">Admin</span> | <a href="#" onclick="logout()">Logout</a>
+                <span id="userRole">Admin</span> | <a href="javascript:void(0)" onclick="logout()">Logout</a>
             </div>
         </header>
 
@@ -39,6 +39,47 @@
                 <div class="admin-actions">
                     <button onclick="showAddUserForm()" class="btn-primary">Add New User</button>
                     <button onclick="loadUsers()" class="btn-secondary">View All Users</button>
+                </div>
+                <div id="addUserForm" style="display:none; margin-top:20px; padding:20px; border:1px solid #ccc; border-radius:5px;">
+                    <h4>Add New User</h4>
+                    <form onsubmit="addUser(event)">
+                        <input type="text" id="userName" placeholder="Full Name" required style="margin:5px; padding:8px; width:200px;"><br>
+                        <input type="text" id="userUsername" placeholder="Username" required style="margin:5px; padding:8px; width:200px;"><br>
+                        <input type="password" id="userPassword" placeholder="Password" required style="margin:5px; padding:8px; width:200px;"><br>
+                        <div style="margin:5px;">
+                            <input type="radio" id="roleAdmin" name="userRole" value="admin" required>
+                            <label for="roleAdmin">Admin</label>
+                            <input type="radio" id="roleDoctor" name="userRole" value="doctor" required>
+                            <label for="roleDoctor">Doctor</label>
+                            <input type="radio" id="roleNurse" name="userRole" value="nurse" required>
+                            <label for="roleNurse">Nurse</label>
+                            <input type="radio" id="roleReceptionist" name="userRole" value="receptionist" required>
+                            <label for="roleReceptionist">Receptionist</label>
+                        </div><br>
+                        <button type="submit" class="btn-primary" style="margin:5px;">Add User</button>
+                        <button type="button" onclick="hideAddUserForm()" class="btn-secondary" style="margin:5px;">Cancel</button>
+                    </form>
+                </div>
+                <div id="editUserForm" style="display:none; margin-top:20px; padding:20px; border:1px solid #ccc; border-radius:5px;">
+                    <h4>Edit User</h4>
+                    <form onsubmit="updateUser(event)">
+                        <input type="hidden" id="editUserId">
+                        <input type="text" id="editUserName" placeholder="Full Name" required style="margin:5px; padding:8px; width:200px;"><br>
+                        <input type="text" id="editUserUsername" placeholder="Username" required style="margin:5px; padding:8px; width:200px;"><br>
+                        <input type="password" id="editUserPassword" placeholder="New Password (optional)" style="margin:5px; padding:8px; width:200px;"><br>
+                        <div style="margin:5px;">
+                            <input type="radio" id="editRoleAdmin" name="editUserRole" value="admin" required>
+                            <label for="editRoleAdmin">Admin</label>
+                            <input type="radio" id="editRoleDoctor" name="editUserRole" value="doctor" required>
+                            <label for="editRoleDoctor">Doctor</label>
+                            <input type="radio" id="editRoleNurse" name="editUserRole" value="nurse" required>
+                            <label for="editRoleNurse">Nurse</label>
+                            <input type="radio" id="editRoleReceptionist" name="editUserRole" value="receptionist" required>
+                            <label for="editRoleReceptionist">Receptionist</label>
+                        </div><br>
+                        <button type="submit" class="btn-primary" style="margin:5px;">Update User</button>
+                        <button type="button" onclick="hideEditUserForm()" class="btn-secondary" style="margin:5px;">Cancel</button>
+                    </form>
                 </div>
                 <div class="table-container" id="usersTableContainer" style="display:none;">
                     <table id="usersTable">
@@ -82,25 +123,7 @@
         </main>
     </div>
 
-    <div id="addUserModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeUserModal()">&times;</span>
-            <h3>Add New User</h3>
-            <form id="addUserForm">
-                <input type="text" id="userName" placeholder="Full Name" required>
-                <input type="text" id="userUsername" placeholder="Username" required>
-                <input type="password" id="userPassword" placeholder="Password" required>
-                <select id="userRole" required>
-                    <option value="">Select Role</option>
-                    <option value="admin">Admin</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="nurse">Nurse</option>
-                    <option value="receptionist">Receptionist</option>
-                </select>
-                <button type="submit" class="btn-primary">Add User</button>
-            </form>
-        </div>
-    </div>
+
 
     <script src="common.js"></script>
     <script src="admin.js"></script>

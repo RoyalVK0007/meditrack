@@ -1,12 +1,8 @@
 // Common functions shared across all pages
 
 function logout() {
-    if (confirm('Are you sure you want to logout?')) {
-        showAlert('Logged out successfully', 'success');
-        setTimeout(() => {
-            window.location.href = '/dashboard.html';
-        }, 1000);
-    }
+    localStorage.clear();
+    window.location.href = '/login.html';
 }
 
 function showAlert(message, type) {
