@@ -177,32 +177,12 @@ Use the "Seed Demo Data" button in Admin panel to populate with sample data.
 - **Training Institutes** - Medical software education
 - **Healthcare Startups** - MVP development base
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Issues**: [GitHub Issues](https://github.com/RoyalVK0007/meditrack/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/RoyalVK0007/meditrack/discussions)
-- **Documentation**: [Wiki](https://github.com/RoyalVK0007/meditrack/wiki)
-
 ## ⚠️ Disclaimer
 
 This software is for educational and development purposes. For production use in healthcare environments, ensure compliance with local healthcare regulations (HIPAA, GDPR, etc.) and conduct proper security audits.
 
 ---
 
-**Made with ❤️ for the healthcare community**
+## **Made with ❤️ for the healthcare community**
 
 *Star ⭐ this repository if you find it helpful!*

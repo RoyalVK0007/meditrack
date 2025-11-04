@@ -1,0 +1,2 @@
+-- Update password hashes to use secure PBKDF2 (password: password123)
+UPDATE users SET password_hash = 'db60f0dcba0024438e4139f7c4415f2402a58c885535cc536b53476ae5ac4f7bf7856d89452b1ce628944c0efacdc48927425fde81df7aba0f04d823674fb9cd' WHERE username IN ('admin', 'doctor1', 'nurse1', 'reception1');
