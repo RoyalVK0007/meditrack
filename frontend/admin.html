@@ -3,24 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="page" content="admin">
+    <meta name="page-title" content="System Administration">
     <title>Admin - MediTrack</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🏥 MediTrack Hospital System</h1>
-            <div class="user-info">
-                <span id="userRole">Admin</span> | <a href="javascript:void(0)" onclick="logout()">Logout</a>
-            </div>
-        </header>
-
-        <nav class="sidebar">
-            <ul>
-                <li><a href="dashboard.html">📊 Dashboard</a></li>
-                <li><a href="patients.html">👥 Patients</a></li>
-            </ul>
-        </nav>
 
         <main class="content page-content">
             <h2>🔐 System Administration</h2>
@@ -125,6 +114,8 @@
 
 
 
+    <script src="template.js"></script>
+    <script src="auth.js"></script>
     <script src="common.js"></script>
     <script src="admin.js"></script>
 </body>

@@ -1,1 +1,8 @@
-node_modules
+node_modules/
+coverage/
+*.log
+.env
+backend/certs/*.pem
+reports/*.pdf
+.DS_Store
+Thumbs.db

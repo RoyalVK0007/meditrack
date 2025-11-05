@@ -3,31 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="page" content="dashboard">
+    <meta name="page-title" content="Dashboard">
     <title>Dashboard - MediTrack</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🏥 MediTrack Hospital System</h1>
-            <div class="user-info">
-                <span id="userRole">Doctor</span> | <button onclick="logout()" class="btn-logout">Logout</button>
-            </div>
-        </header>
-
-        <nav class="sidebar">
-            <ul>
-                <li><a href="dashboard.html" class="active">📊 Dashboard</a></li>
-                <li><a href="patients.html">👥 Patients</a></li>
-                <li><a href="vitals.html">💓 Vitals</a></li>
-                <li><a href="medications.html">💊 Medications</a></li>
-                <li><a href="billing.html">💰 Billing</a></li>
-                <li><a href="reports.html">📋 Reports</a></li>
-                <li><a href="admin.html">⚙️ Admin</a></li>
-                <li><a href="about.html">📝 About</a></li>
-            </ul>
-        </nav>
 
         <main class="content page-content">
             <h2>Dashboard</h2>
@@ -118,6 +101,7 @@
             </div>
         </main>
     </div>
+    <script src="template.js"></script>
     <script src="auth.js"></script>
     <script src="common.js"></script>
     <script src="dashboard.js"></script>

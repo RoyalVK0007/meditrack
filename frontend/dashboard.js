@@ -28,6 +28,7 @@ async function loadDashboard() {
         
     } catch (error) {
         console.error('Error loading dashboard:', error);
+        showAlert('Error loading dashboard data', 'error');
     }
 }
 

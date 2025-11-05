@@ -8,11 +8,11 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f7fa;
     color: #333;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
 }
 
 .page-content {
-    animation: fadeInUp 0.5s ease-out;
+    animation: fadeInUp 0.25s ease-out;
 }
 
 @keyframes fadeInUp {
@@ -31,7 +31,7 @@ body {
     padding: 12px 20px;
     color: #666;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     border-left: 3px solid transparent;
 }
 
@@ -179,7 +179,7 @@ tr:hover {
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.3s;
+    transition: all 0.15s;
 }
 
 .btn-primary {
@@ -245,7 +245,7 @@ tr:hover {
 
 .admin-actions button {
     margin-right: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
 }
 
 .admin-actions button:hover {
@@ -254,7 +254,7 @@ tr:hover {
 }
 
 .stat-card, .admin-card {
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
 }
 
 .stat-card:hover, .admin-card:hover {
@@ -263,7 +263,7 @@ tr:hover {
 }
 
 .table-container {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes fadeIn {
@@ -496,7 +496,7 @@ tr:hover {
     padding: 10px 15px;
     text-decoration: none;
     display: block;
-    transition: background 0.2s;
+    transition: background 0.1s;
 }
 
 .dropdown-content a:hover {
@@ -815,7 +815,7 @@ tr:hover {
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.3s;
+    transition: all 0.15s;
 }
 
 .btn-danger:hover {
@@ -958,7 +958,7 @@ tr:hover {
     border: 2px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
-    transition: border-color 0.3s;
+    transition: border-color 0.15s;
 }
 
 .form-group input:focus {
@@ -977,7 +977,7 @@ tr:hover {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.15s;
 }
 
 .btn-login:hover {

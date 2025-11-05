@@ -6,12 +6,22 @@ const JWT_EXPIRES_IN = '1h';
 
 // Hash password
 async function hashPassword(password) {
-  return await bcrypt.hash(password, 10);
+  try {
+    return await bcrypt.hash(password, 10);
+  } catch (error) {
+    console.error('Password hashing failed:', error);
+    throw error;
+  }
 }
 
 // Compare password
 async function comparePassword(password, hash) {
-  return await bcrypt.compare(password, hash);
+  try {
+    return await bcrypt.compare(password, hash);
+  } catch (error) {
+    console.error('Password comparison failed:', error);
+    throw error;
+  }
 }
 
 // Generate JWT token
@@ -32,6 +42,7 @@ function verifyToken(token) {
   try {
     return jwt.verify(token, JWT_SECRET);
   } catch (error) {
+    console.error('Token verification failed:', error.message);
     return null;
   }
 }

@@ -19,6 +19,7 @@ async function loadAdminStats() {
         document.getElementById('adminLastBackup').textContent = new Date().toLocaleDateString();
     } catch (error) {
         console.error('Error loading admin stats:', error);
+        showAlert('Error loading admin stats', 'error');
     }
 }
 

@@ -183,8 +183,23 @@ function closeAuditModal() {
     document.getElementById('auditLogModal').style.display = 'none';
 }
 
-function markPaid(billId) {
-    logBillAudit('paid', billId, 'Payment status updated to Paid');
-    showAlert(`Bill ID: ${billId} marked as paid`, 'success');
-    loadBilling();
+async function markPaid(billId) {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`/api/bills/${billId}/paid`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            logBillAudit('paid', billId, 'Payment status updated to Paid');
+            showAlert(`Bill ID: ${billId} marked as paid`, 'success');
+            loadBilling();
+        } else {
+            showAlert('Error updating bill status', 'error');
+        }
+    } catch (error) {
+        console.error('Error marking bill as paid:', error);
+        showAlert('Error updating bill status', 'error');
+    }
 }

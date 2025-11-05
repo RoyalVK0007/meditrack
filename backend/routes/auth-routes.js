@@ -46,6 +46,7 @@ async function register(req, res) {
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'User registered successfully' }));
     } catch (error) {
+      console.error('Error registering user:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: error.message }));
     }
@@ -105,6 +106,7 @@ async function login(req, res) {
         }
       }));
     } catch (error) {
+      console.error('Error during login:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: error.message }));
     }

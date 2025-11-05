@@ -9,6 +9,7 @@ const { getAssignedPatients, getPatientVitals, addPrescription } = require('./ro
 const { addVital, getPatientsForVitals, updateVital } = require('./routes/nurse-routes');
 const { addPatient, editPatient, createBill, getAllPatients } = require('./routes/receptionist-routes');
 const { seedDemoData, clearAllData, getAllVitals, deletePatient } = require('./routes/legacy-routes');
+const { getBills, generateBillPDF, markBillPaid, generateCSVReport } = require('./routes');
 
 // SSL certs
 let options;
@@ -18,7 +19,8 @@ try {
     cert: fs.readFileSync("./backend/certs/cert.pem"),
   };
 } catch (error) {
-  console.error('SSL certificates not found. Please generate certificates first.');
+  console.error('🔒 SSL certificates not found. Please generate certificates first.');
+  console.error('💡 Run: openssl req -x509 -newkey rsa:4096 -keyout backend/certs/key.pem -out backend/certs/cert.pem -days 365 -nodes');
   process.exit(1);
 }
 
@@ -126,7 +128,7 @@ const server = https.createServer(options, async (req, res) => {
     return authenticateToken(req, res, () => checkRole(['nurse', 'admin'])(req, res, () => addVital(req, res)));
   }
   if (req.method === "GET" && parsedUrl.pathname === "/api/billing") {
-    return authenticateToken(req, res, () => checkRole(['receptionist', 'admin'])(req, res, () => getAllPatients(req, res)));
+    return authenticateToken(req, res, () => checkRole(['receptionist', 'admin'])(req, res, () => getBills(req, res)));
   }
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/seed") {
     return authenticateToken(req, res, () => checkRole(['admin'])(req, res, () => seedDemoData(req, res)));
@@ -145,6 +147,12 @@ const server = https.createServer(options, async (req, res) => {
   }
   if (req.method === "GET" && parsedUrl.pathname.startsWith("/api/bills/pdf/")) {
     return generateBillPDF(req, res);
+  }
+  if (req.method === "PUT" && parsedUrl.pathname.match(/\/api\/bills\/\d+\/paid$/)) {
+    return authenticateToken(req, res, () => checkRole(['receptionist', 'admin'])(req, res, () => markBillPaid(req, res)));
+  }
+  if (req.method === "GET" && parsedUrl.pathname === "/api/reports/csv") {
+    return authenticateToken(req, res, () => checkRole(['admin', 'doctor'])(req, res, () => generateCSVReport(req, res)));
   }
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/clear") {
     return authenticateToken(req, res, () => checkRole(['admin'])(req, res, () => clearAllData(req, res)));
@@ -167,4 +175,6 @@ const server = https.createServer(options, async (req, res) => {
 // Start server
 server.listen(3000, () => {
   console.log("✅ MediTrack backend running at https://localhost:3000");
+  console.log("🔗 Database connection status will be shown above");
+  console.log("📋 Use Admin panel to seed demo data if needed");
 });

@@ -1,38 +1,24 @@
 {
   "name": "meditrack-hospital",
-  "version": "1.0.0-beta",
-  "description": "Comprehensive offline-first hospital management system for patient records, vitals tracking, billing, and administration",
+  "version": "1.0.0",
+  "description": "Hospital Management System",
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
-    "test": "echo \"No tests specified\""
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
+    "mysql2": "^3.6.0",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.14.3",
     "pdfkit": "^0.13.0",
-    "xlsx": "^0.18.5"
+    "csv-writer": "^1.6.0"
   },
-  "author": "MediTrack Development Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/RoyalVK0007/meditrack.git"
-  },
-  "keywords": [
-    "hospital",
-    "healthcare",
-    "patient-management",
-    "medical-records",
-    "billing",
-    "vitals-tracking",
-    "offline-first",
-    "nodejs",
-    "mysql"
-  ],
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "@types/jest": "^29.5.5"
   }
 }

@@ -19,11 +19,15 @@ function makeAuthenticatedRequest(url, options = {}) {
         headers
     }).then(response => {
         if (response.status === 401) {
+            console.error('Unauthorized access - redirecting to login');
             localStorage.clear();
             window.location.href = '/login.html';
             throw new Error('Unauthorized');
         }
         return response;
+    }).catch(error => {
+        console.error('API request failed:', error);
+        throw error;
     });
 }
 

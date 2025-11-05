@@ -10,6 +10,7 @@ async function getAllUsers(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(users));
   } catch (error) {
+    console.error('Error fetching users:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: error.message }));
   }
@@ -51,6 +52,7 @@ async function addUser(req, res) {
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'User added successfully' }));
     } catch (error) {
+      console.error('Error adding user:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: error.message }));
     }
@@ -73,6 +75,7 @@ async function getSystemStats(req, res) {
       totalVitals: vitals[0].count
     }));
   } catch (error) {
+    console.error('Error fetching system stats:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: error.message }));
   }
@@ -100,6 +103,7 @@ async function deleteUser(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'User deleted successfully' }));
   } catch (error) {
+    console.error('Error deleting user:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: error.message }));
   }
@@ -148,6 +152,7 @@ async function updateUser(req, res) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'User updated successfully' }));
     } catch (error) {
+      console.error('Error updating user:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: error.message }));
     }

@@ -15,6 +15,7 @@ async function getAssignedPatients(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(patients));
   } catch (error) {
+    console.error('Error fetching assigned patients:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: error.message }));
   }
@@ -31,6 +32,7 @@ async function getPatientVitals(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(vitals));
   } catch (error) {
+    console.error('Error fetching patient vitals:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: error.message }));
   }
@@ -52,6 +54,7 @@ async function addPrescription(req, res) {
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Prescription added successfully' }));
     } catch (error) {
+      console.error('Error adding prescription:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: error.message }));
     }

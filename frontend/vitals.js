@@ -24,6 +24,7 @@ async function loadPatients() {
         });
     } catch (error) {
         console.error('Error loading patients:', error);
+        showAlert('Error loading patients', 'error');
     }
 }
 
@@ -123,6 +124,7 @@ async function loadVitalsHistory(patientId) {
         
     } catch (error) {
         console.error('Error loading vitals history:', error);
+        showAlert('Error loading vitals history', 'error');
     }
 }
 

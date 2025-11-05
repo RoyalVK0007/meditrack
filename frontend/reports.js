@@ -35,8 +35,31 @@ function generateDailyReport() {
     showAlert('Daily report generated successfully', 'success');
 }
 
-function exportToExcel() {
-    showAlert('Data exported to Excel successfully', 'success');
+async function exportToCSV() {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/reports/csv', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `meditrack-report-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            showAlert('CSV report downloaded successfully', 'success');
+        } else {
+            showAlert('Error generating CSV report', 'error');
+        }
+    } catch (error) {
+        console.error('Error exporting CSV:', error);
+        showAlert('Error generating CSV report', 'error');
+    }
 }
 
 function generatePDF() {
