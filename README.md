@@ -1,4 +1,4 @@
-# MediTrack Hospital Management System v1.0 Beta
+# MediTrack Hospital Management System v2.0.1 Beta
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
@@ -10,7 +10,15 @@ MediTrack is a comprehensive, offline-first hospital management system designed 
 
 **Perfect for hospitals with limited internet connectivity or strict data privacy requirements.**
 
-## 🚀 V1.0 Beta Features
+## 🚀 V2.0.1 Beta Features
+
+### 🖥️ **Desktop & Web Application**
+- ✅ Cross-platform desktop app (Windows, Linux, macOS)
+- ✅ Electron-based native application
+- ✅ Web browser access (HTTPS)
+- ✅ Offline-first architecture
+- ✅ Professional installers and portable versions
+- ✅ Auto-updater ready
 
 ### 👥 **Patient Management**
 - ✅ Complete patient registration and profiles
@@ -80,6 +88,7 @@ MediTrack is a comprehensive, offline-first hospital management system designed 
 ## 🛠️ Technology Stack
 
 ### **Frontend**
+- **Electron** - Cross-platform desktop application
 - **HTML5, CSS3, JavaScript** - Core web technologies
 - **Chart.js** - Interactive data visualizations
 - **Responsive Design** - Mobile-first approach
@@ -87,6 +96,7 @@ MediTrack is a comprehensive, offline-first hospital management system designed 
 
 ### **Backend**
 - **Node.js 18+** - Server runtime
+- **Electron Main Process** - Desktop app management
 - **MySQL2** - Database connectivity
 - **PDFKit** - PDF generation
 - **XLSX** - Excel file handling
@@ -108,6 +118,9 @@ MediTrack is a comprehensive, offline-first hospital management system designed 
 
 ```
 meditrack-hospital/
+├── electron/
+│   ├── main.js        # Electron main process
+│   └── preload.js     # Secure preload script
 ├── frontend/
 │   ├── *.html         # Web pages (dashboard, patients, billing, etc.)
 │   ├── *.js           # Client-side JavaScript
@@ -121,8 +134,11 @@ meditrack-hospital/
 ├── sql/
 │   └── schema.sql     # Database schema
 ├── reports/           # Generated PDFs and exports
-├── package.json       # Dependencies
-├── setup.bat          # Windows setup script
+├── dist/              # Built distribution packages
+├── package.json       # Dependencies & build config
+├── setup-first-time.* # Setup scripts (Windows/Linux)
+├── build-dist.*       # Build scripts
+├── SETUP.md           # Detailed setup guide
 └── README.md          # Documentation
 ```
 
@@ -133,7 +149,7 @@ meditrack-hospital/
 - MySQL 8.0+ ([Download](https://dev.mysql.com/downloads/))
 - Git (for cloning)
 
-### **Installation**
+### **Automated Setup**
 
 1. **Clone the repository:**
    ```bash
@@ -141,41 +157,70 @@ meditrack-hospital/
    cd meditrack-hospital
    ```
 
-2. **Install dependencies:**
+2. **Run setup script:**
    ```bash
-   npm install
+   # Windows
+   setup-first-time.bat
+   
+   # Linux/macOS
+   chmod +x setup-first-time.sh
+   ./setup-first-time.sh
    ```
 
-3. **Set up database:**
-   ```bash
-   # Update backend/db.js with your MySQL credentials
-   mysql -u root -p < sql/schema.sql
-   ```
+### **Running the Application**
 
-4. **Start the server:**
-   ```bash
-   npm start
-   # or
-   node backend/server.js
-   ```
+#### **Desktop App (Recommended)**
+```bash
+npm run electron
+```
 
-5. **Access the application:**
-   ```
-   https://localhost:3000
-   ```
-   *Accept the SSL certificate warning (self-signed)*
+#### **Web Browser**
+```bash
+npm start
+# Access at https://localhost:3000
+```
+
+#### **Development Mode**
+```bash
+npm run electron-dev
+```
+
+### **Building Distribution Packages**
+
+```bash
+# Windows
+build-dist.bat
+
+# Linux/macOS
+./build-dist.sh
+
+# Manual build
+npm run build-all
+```
+
+**Distribution files created in `dist/` folder:**
+- Windows: Installer (.exe) and Portable (.exe)
+- Linux: AppImage and DEB package
+- macOS: DMG installer (when built on macOS)
 
 ### **Demo Data**
 Use the "Seed Demo Data" button in Admin panel to populate with sample data.
 
 ## 🎯 Use Cases
 
-- **Small to Medium Hospitals** - Complete patient management
-- **Clinics** - Patient records and billing
-- **Emergency Centers** - Quick patient tracking
-- **Rural Healthcare** - Offline-first operation
-- **Training Institutes** - Medical software education
-- **Healthcare Startups** - MVP development base
+- **Small to Medium Hospitals** - Complete patient management with desktop app
+- **Clinics** - Patient records and billing with offline capability
+- **Emergency Centers** - Quick patient tracking with native performance
+- **Rural Healthcare** - Offline-first desktop operation
+- **Training Institutes** - Medical software education with easy deployment
+- **Healthcare Startups** - MVP development base with professional packaging
+- **Multi-location Facilities** - Distributed desktop installations
+
+## 📋 Additional Resources
+
+- **[SETUP.md](SETUP.md)** - Detailed setup and build instructions
+- **[Releases](https://github.com/RoyalVK0007/meditrack/releases)** - Download pre-built packages
+- **[Issues](https://github.com/RoyalVK0007/meditrack/issues)** - Report bugs or request features
 
 ## ⚠️ Disclaimer
 
