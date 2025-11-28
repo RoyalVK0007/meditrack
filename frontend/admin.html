@@ -6,72 +6,91 @@
     <meta name="page" content="admin">
     <meta name="page-title" content="System Administration">
     <title>Admin - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-
-        <main class="content page-content">
-            <h2>🔐 System Administration</h2>
-            
-            <div class="admin-card">
-                <h3>📊 Database Management</h3>
-                <div class="admin-actions">
-                    <button onclick="seedDemoData()" class="btn-primary">Seed Demo Data</button>
-                    <button onclick="backupDatabase()" class="btn-secondary">Backup Database</button>
-                    <button onclick="clearAllData()" class="btn-danger">Clear All Data</button>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🔐 System Administration</h3>
                 </div>
-            </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-header">
+                            <h3 class="card-title">📊 Database Management</h3>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="seedDemoData()" class="btn btn-primary">Seed Demo Data</button>
+                            <button onclick="backupDatabase()" class="btn btn-secondary">Backup Database</button>
+                            <button onclick="clearAllData()" class="btn btn-danger">Clear All Data</button>
+                        </div>
+                    </div>
 
-            <div class="admin-card">
-                <h3>👥 User Management</h3>
-                <div class="admin-actions">
-                    <button onclick="showAddUserForm()" class="btn-primary">Add New User</button>
-                    <button onclick="loadUsers()" class="btn-secondary">View All Users</button>
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-header">
+                            <h3 class="card-title">👥 User Management</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="showAddUserForm()" class="btn btn-primary">Add New User</button>
+                            <button onclick="loadUsers()" class="btn btn-secondary">View All Users</button>
+                        </div>
+                    </div>
                 </div>
-                <div id="addUserForm" style="display:none; margin-top:20px; padding:20px; border:1px solid #ccc; border-radius:5px;">
-                    <h4>Add New User</h4>
+
+                <!-- Forms and Tables -->
+                <div id="addUserForm" class="card mt-4" style="display:none;">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New User</h4>
+                    </div>
                     <form onsubmit="addUser(event)">
-                        <input type="text" id="userName" placeholder="Full Name" required style="margin:5px; padding:8px; width:200px;"><br>
-                        <input type="text" id="userUsername" placeholder="Username" required style="margin:5px; padding:8px; width:200px;"><br>
-                        <input type="password" id="userPassword" placeholder="Password" required style="margin:5px; padding:8px; width:200px;"><br>
-                        <div style="margin:5px;">
-                            <input type="radio" id="roleAdmin" name="userRole" value="admin" required>
-                            <label for="roleAdmin">Admin</label>
-                            <input type="radio" id="roleDoctor" name="userRole" value="doctor" required>
-                            <label for="roleDoctor">Doctor</label>
-                            <input type="radio" id="roleNurse" name="userRole" value="nurse" required>
-                            <label for="roleNurse">Nurse</label>
-                            <input type="radio" id="roleReceptionist" name="userRole" value="receptionist" required>
-                            <label for="roleReceptionist">Receptionist</label>
-                        </div><br>
-                        <button type="submit" class="btn-primary" style="margin:5px;">Add User</button>
-                        <button type="button" onclick="hideAddUserForm()" class="btn-secondary" style="margin:5px;">Cancel</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="userName" class="form-input" placeholder="Full Name" required>
+                            <input type="text" id="userUsername" class="form-input" placeholder="Username" required>
+                            <input type="email" id="userEmail" class="form-input" placeholder="Email Address" required>
+                        </div>
+                        <small class="text-secondary block my-2">Default password: password123</small>
+                        <div class="my-2">
+                            <label class="mr-4"><input type="radio" id="roleAdmin" name="userRole" value="admin" required> Admin</label>
+                            <label class="mr-4"><input type="radio" id="roleDoctor" name="userRole" value="doctor" required> Doctor</label>
+                            <label class="mr-4"><input type="radio" id="roleNurse" name="userRole" value="nurse" required> Nurse</label>
+                            <label><input type="radio" id="roleReceptionist" name="userRole" value="receptionist" required> Receptionist</label>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Add User</button>
+                            <button type="button" onclick="hideAddUserForm()" class="btn btn-secondary">Cancel</button>
+                        </div>
                     </form>
                 </div>
-                <div id="editUserForm" style="display:none; margin-top:20px; padding:20px; border:1px solid #ccc; border-radius:5px;">
-                    <h4>Edit User</h4>
+
+                <div id="editUserForm" class="card mt-4" style="display:none;">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit User</h4>
+                    </div>
                     <form onsubmit="updateUser(event)">
                         <input type="hidden" id="editUserId">
-                        <input type="text" id="editUserName" placeholder="Full Name" required style="margin:5px; padding:8px; width:200px;"><br>
-                        <input type="text" id="editUserUsername" placeholder="Username" required style="margin:5px; padding:8px; width:200px;"><br>
-                        <input type="password" id="editUserPassword" placeholder="New Password (optional)" style="margin:5px; padding:8px; width:200px;"><br>
-                        <div style="margin:5px;">
-                            <input type="radio" id="editRoleAdmin" name="editUserRole" value="admin" required>
-                            <label for="editRoleAdmin">Admin</label>
-                            <input type="radio" id="editRoleDoctor" name="editUserRole" value="doctor" required>
-                            <label for="editRoleDoctor">Doctor</label>
-                            <input type="radio" id="editRoleNurse" name="editUserRole" value="nurse" required>
-                            <label for="editRoleNurse">Nurse</label>
-                            <input type="radio" id="editRoleReceptionist" name="editUserRole" value="receptionist" required>
-                            <label for="editRoleReceptionist">Receptionist</label>
-                        </div><br>
-                        <button type="submit" class="btn-primary" style="margin:5px;">Update User</button>
-                        <button type="button" onclick="hideEditUserForm()" class="btn-secondary" style="margin:5px;">Cancel</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="editUserName" class="form-input" placeholder="Full Name" required>
+                            <input type="text" id="editUserUsername" class="form-input" placeholder="Username" required>
+                            <input type="email" id="editUserEmail" class="form-input" placeholder="Email Address" required>
+                        </div>
+                        <div class="my-2">
+                            <label class="mr-4"><input type="radio" id="editRoleAdmin" name="editUserRole" value="admin" required> Admin</label>
+                            <label class="mr-4"><input type="radio" id="editRoleDoctor" name="editUserRole" value="doctor" required> Doctor</label>
+                            <label class="mr-4"><input type="radio" id="editRoleNurse" name="editUserRole" value="nurse" required> Nurse</label>
+                            <label><input type="radio" id="editRoleReceptionist" name="editUserRole" value="receptionist" required> Receptionist</label>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Update User</button>
+                            <button type="button" onclick="hideEditUserForm()" class="btn btn-secondary">Cancel</button>
+                        </div>
                     </form>
                 </div>
-                <div class="table-container" id="usersTableContainer" style="display:none;">
-                    <table id="usersTable">
+
+                <div class="table-container mt-4" id="usersTableContainer" style="display:none;">
+                    <table class="table" id="usersTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -84,31 +103,33 @@
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
 
-            <div class="admin-card">
-                <h3>📈 System Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Total Patients:</span>
-                        <span class="stat-value" id="adminTotalPatients">0</span>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">📈 System Statistics</h3>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Active Users:</span>
-                        <span class="stat-value" id="adminActiveUsers">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Database Size:</span>
-                        <span class="stat-value" id="adminDbSize">0 MB</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Last Backup:</span>
-                        <span class="stat-value" id="adminLastBackup">Never</span>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">Total Patients:</span>
+                            <span class="stat-value" id="adminTotalPatients">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Active Users:</span>
+                            <span class="stat-value" id="adminActiveUsers">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Database Size:</span>
+                            <span class="stat-value" id="adminDbSize">0 MB</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Last Backup:</span>
+                            <span class="stat-value" id="adminLastBackup">Never</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="adminStatus"></div>
+                <div id="adminStatus"></div>
+            </div>
         </main>
     </div>
 

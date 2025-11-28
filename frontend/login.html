@@ -4,39 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="login-body">
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>🏥 MediTrack</h1>
-                <p>Hospital Management System</p>
+<body class="login-page">
+    <!-- Login Navbar -->
+    <nav class="login-navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <img src="logo.jpg" alt="MediTrack Logo" class="navbar-logo" style="width: 40px; height: 40px; object-fit: contain;">
+                <div class="navbar-text">
+                    <span class="navbar-title">MediTrack</span>
+                    <span class="navbar-subtitle">Hospital Management System</span>
+                </div>
             </div>
-            
-            <form id="loginForm" class="login-form">
+            <div class="navbar-links">
+                <a href="#features" class="navbar-link">Features</a>
+                <a href="#about" class="navbar-link">About</a>
+                <a href="#support" class="navbar-link">Support</a>
+            </div>
+        </div>
+    </nav>
 
-                
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+    <div class="login-container">
+        <!-- Right Side - Login Form -->
+        <div class="login-form-section">
+            <div class="login-card">
+                <div class="login-header">
+                    <img src="logo.jpg" alt="MediTrack Logo" class="login-logo" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 1rem;">
+                    <h1 class="login-title">Sign In</h1>
+                    <p class="login-subtitle">Access your MediTrack dashboard</p>
                 </div>
                 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                
-                <button type="submit" class="btn-login">Login</button>
-            </form>
-            
-            <div class="demo-accounts">
-                <h4>Demo Accounts:</h4>
-                <p><strong>Admin:</strong> admin / password123</p>
-                <p><strong>Doctor:</strong> doctor1 / password123</p>
-                <p><strong>Nurse:</strong> nurse1 / password123</p>
-                <p><strong>Reception:</strong> reception1 / password123</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            <span class="label-icon">👤</span>
+                            Username
+                        </label>
+                        <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <span class="label-icon">🔑</span>
+                            Password
+                        </label>
+                        <div class="password-input-container">
+                            <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                <svg id="password-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link" onclick="showForgotPasswordModal(event)">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary login-btn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
             </div>
+        </div>
+
+        <!-- Left Side - Context & Information -->
+        <div class="login-info">
+            <div class="info-content">
+                <h2 class="info-title">Welcome to MediTrack</h2>
+                <p class="info-description">
+                    A comprehensive hospital management system designed to streamline healthcare operations, 
+                    improve patient care, and enhance medical staff efficiency.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Footer -->
+    <footer class="login-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span>© 2024 MediTrack. All rights reserved.</span>
+            </div>
+            <div class="footer-right">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+    
+    <div id="forgotPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeForgotPasswordModal()">&times;</span>
+            <h3>Reset Password</h3>
+            <p>Enter your username to receive password reset instructions.</p>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="resetUsername">Username</label>
+                    <input type="text" id="resetUsername" required placeholder="Enter your username">
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reset Instructions</button>
+            </form>
         </div>
     </div>
     

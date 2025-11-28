@@ -4,49 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receptionist Dashboard - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏥 MediTrack Hospital System</h1>
-            <div class="user-info">
-                <span id="userRole">Receptionist</span> | <button id="logoutBtn" class="btn-logout">Logout</button>
-            </div>
-        </header>
-
-        <nav class="sidebar">
-            <ul>
-                <li><a href="receptionist-dashboard.html" class="active">📊 Dashboard</a></li>
-                <li><a href="patients.html">👥 Patients</a></li>
-                <li><a href="billing.html">💰 Billing</a></li>
-            </ul>
-        </nav>
-
-        <main class="content page-content">
-            <h2>Receptionist Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Today's Admissions</h3>
-                    <span id="todayAdmissions">4</span>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Receptionist Dashboard</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Pending Bills</h3>
-                    <span id="pendingBills">12</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Appointments</h3>
-                    <span id="appointments">15</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Waiting Patients</h3>
-                    <span id="waitingPatients">6</span>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Today's Admissions</span>
+                        <span class="stat-value" id="todayAdmissions">4</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Pending Bills</span>
+                        <span class="stat-value" id="pendingBills">12</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Appointments</span>
+                        <span class="stat-value" id="appointments">15</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Waiting Patients</span>
+                        <span class="stat-value" id="waitingPatients">6</span>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="template.js"></script>
     <script src="auth.js"></script>
     <script src="common.js"></script>
+    <script src="receptionist-dashboard.js"></script>
     <script>
         restrictAccess(['receptionist']);
     </script>

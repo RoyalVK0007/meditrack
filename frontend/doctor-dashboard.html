@@ -4,56 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏥 MediTrack Hospital System</h1>
-            <div class="user-info">
-                <span id="userRole">Doctor</span> | <button id="logoutBtn" class="btn-logout">Logout</button>
-            </div>
-        </header>
-
-        <nav class="sidebar">
-            <ul>
-                <li><a href="doctor-dashboard.html" class="active">📊 Dashboard</a></li>
-                <li><a href="patients.html">👥 Patients</a></li>
-                <li><a href="vitals.html">💓 Vitals</a></li>
-                <li><a href="medications.html">💊 Medications</a></li>
-                <li><a href="reports.html">📋 Reports</a></li>
-            </ul>
-        </nav>
-
-        <main class="content page-content">
-            <h2>Doctor Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>My Patients</h3>
-                    <span id="myPatients">12</span>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Doctor Dashboard</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Critical Cases</h3>
-                    <span id="criticalCases">2</span>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">My Patients</span>
+                        <span class="stat-value" id="myPatients">12</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Critical Cases</span>
+                        <span class="stat-value" id="criticalCases">2</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Today's Appointments</span>
+                        <span class="stat-value" id="todayAppointments">8</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Pending Reports</span>
+                        <span class="stat-value" id="pendingReports">3</span>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Today's Appointments</h3>
-                    <span id="todayAppointments">8</span>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Vitals Trend</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="vitalsChart"></canvas>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Pending Reports</h3>
-                    <span id="pendingReports">3</span>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="vitalsChart"></canvas>
             </div>
         </main>
     </div>
+    <script src="template.js"></script>
     <script src="auth.js"></script>
     <script src="common.js"></script>
-    <script src="dashboard.js"></script>
+    <script src="doctor-dashboard.js"></script>
     <script>
         restrictAccess(['doctor']);
     </script>

@@ -6,44 +6,47 @@
     <meta name="page" content="patients">
     <meta name="page-title" content="Patient Management">
     <title>Patients - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-
         <main class="content page-content">
-            <h2>Patient Management</h2>
-            <div class="controls">
-                <button onclick="showAddPatientForm()" class="btn-primary">+ Add New Patient</button>
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search patients..." onkeyup="filterPatients()">
-                    <button onclick="clearSearch()" class="btn-clear">×</button>
-                </div>
-                <div class="sort-dropdown">
-                    <button class="btn-secondary dropdown-btn" onclick="toggleSortDropdown()">Sort By <span class="dropdown-arrow">▼</span></button>
-                    <div class="dropdown-content" id="sortDropdown">
-                        <a href="#" onclick="sortTable('patient_id')">By ID</a>
-                        <a href="#" onclick="sortTable('name')">By Name</a>
-                        <a href="#" onclick="sortTable('status')">By Status</a>
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-center" style="width: 100%;">
+                        <div class="flex gap-2">
+                            <button onclick="showAddPatientForm()" class="btn btn-primary">
+                                <span>+</span> Add New Patient
+                            </button>
+                            <button onclick="showAuditLog()" class="btn btn-secondary">
+                                <span>📅</span> Audit Log
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <input type="text" id="searchInput" class="form-input" placeholder="Search patients..." onkeyup="filterPatients()" style="width: 250px;">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button onclick="showAuditLog()" class="btn-audit">📅 Audit Log</button>
-            </div>
-            <div class="table-container">
-                <table id="patientsTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Contact</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                
+                <div class="table-container" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
+                    <table class="table" id="patientsTable" style="display: table !important; visibility: visible !important; opacity: 1 !important; width: 100%;">
+                        <thead style="display: table-header-group !important;">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody style="display: table-row-group !important;"></tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>

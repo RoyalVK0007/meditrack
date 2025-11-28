@@ -1,6 +1,7 @@
 // Dashboard specific functions
 document.addEventListener('DOMContentLoaded', function() {
     loadDashboard();
+    checkAdminRole();
 });
 
 async function loadDashboard() {
@@ -32,8 +33,15 @@ async function loadDashboard() {
     }
 }
 
+let vitalsChart = null;
+
 async function createVitalsChart() {
     try {
+        // Destroy existing chart if it exists
+        if (vitalsChart) {
+            vitalsChart.destroy();
+        }
+        
         const token = localStorage.getItem('jwtToken');
         const response = await fetch('/api/vitals/all', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -54,7 +62,7 @@ async function createVitalsChart() {
         const heartRates = last7Days.map(v => v.heart_rate);
         const temperatures = last7Days.map(v => v.temperature);
         
-        new Chart(ctx, {
+        vitalsChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
@@ -63,18 +71,31 @@ async function createVitalsChart() {
                     data: heartRates,
                     borderColor: '#667eea',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4
+                    tension: 0.4,
+                    fill: false
                 }, {
                     label: 'Temperature (°F)',
                     data: temperatures,
                     borderColor: '#f093fb',
                     backgroundColor: 'rgba(240, 147, 251, 0.1)',
-                    tension: 0.4
+                    tension: 0.4,
+                    fill: false
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                animation: false,
+                interaction: {
+                    intersect: false
+                },
+                onResize: function(chart, size) {
+                    // Prevent chart from growing beyond container
+                    if (size.height > 300) {
+                        chart.resize(size.width, 300);
+                    }
+                },
                 plugins: {
                     title: {
                         display: true,
@@ -86,7 +107,9 @@ async function createVitalsChart() {
                 },
                 scales: {
                     y: {
-                        beginAtZero: false
+                        beginAtZero: false,
+                        min: 60, // Set reasonable min for vitals
+                        max: 120 // Set reasonable max for vitals
                     }
                 }
             }
@@ -100,7 +123,7 @@ async function createVitalsChart() {
 }
 
 function createDemoChart(ctx) {
-    new Chart(ctx, {
+    vitalsChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
@@ -109,18 +132,22 @@ function createDemoChart(ctx) {
                 data: [72, 75, 78, 74, 76, 73, 75],
                 borderColor: '#667eea',
                 backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: false
             }, {
                 label: 'Temperature (°F)',
                 data: [98.6, 98.8, 99.1, 98.5, 98.7, 98.6, 98.9],
                 borderColor: '#f093fb',
                 backgroundColor: 'rgba(240, 147, 251, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: false
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            animation: false,
             plugins: {
                 title: {
                     display: true,
@@ -132,7 +159,9 @@ function createDemoChart(ctx) {
             },
             scales: {
                 y: {
-                    beginAtZero: false
+                    beginAtZero: false,
+                    min: 60,
+                    max: 120
                 }
             }
         }
@@ -156,4 +185,86 @@ function triggerFireAlarm() {
             }
         }, 1000);
     }
+}
+
+// Show admin controls if user is admin
+function checkAdminRole() {
+    const userRole = localStorage.getItem('userRole');
+    if (userRole === 'admin') {
+        document.getElementById('adminControls').style.display = 'block';
+    }
+}
+
+// Admin-specific functions
+async function seedDemoData() {
+    try {
+        const response = await fetch('/api/admin/seed', { 
+            method: 'POST', 
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` } 
+        });
+        if (response.ok) showAlert('Demo data seeded successfully', 'success');
+        else showAlert('Failed to seed data', 'error');
+    } catch (error) {
+        showAlert('Error seeding data', 'error');
+    }
+}
+
+async function clearAllData() {
+    if (confirm('Are you sure? This will delete ALL data!')) {
+        try {
+            const response = await fetch('/api/admin/clear', { 
+                method: 'POST', 
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` } 
+            });
+            if (response.ok) showAlert('All data cleared', 'success');
+            else showAlert('Error clearing data', 'error');
+        } catch (error) {
+            showAlert('Error clearing data', 'error');
+        }
+    }
+}
+
+async function generateReport() {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('/api/reports/csv', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'meditrack-report.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            showAlert('Report downloaded successfully', 'success');
+        } else {
+            showAlert('Failed to generate report', 'error');
+        }
+    } catch (error) {
+        showAlert('Error generating report', 'error');
+    }
+}
+
+// Quick Actions
+function quickAddPatient() {
+    // Store intent to add patient and redirect
+    localStorage.setItem('quickAction', 'addPatient');
+    window.location.href = 'patients.html';
+}
+
+function quickRecordVitals() {
+    // Store intent to record vitals and redirect
+    localStorage.setItem('quickAction', 'recordVitals');
+    window.location.href = 'vitals.html';
+}
+
+function quickCreateBill() {
+    // Store intent to create bill and redirect
+    localStorage.setItem('quickAction', 'createBill');
+    window.location.href = 'billing.html';
 }

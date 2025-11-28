@@ -3,20 +3,33 @@ DROP DATABASE IF EXISTS meditrack_hospital;
 CREATE DATABASE meditrack_hospital;
 USE meditrack_hospital;
 
--- Users (for login - doctors, nurses, admin, receptionist)
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100),
-    role ENUM('admin','doctor','nurse','receptionist') NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP NULL
+    phone VARCHAR(20),
+    role ENUM('admin','doctor','nurse','receptionist') NOT NULL DEFAULT 'doctor',
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    avatar VARCHAR(255),
+    is_first_login BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL DEFAULT NULL
 );
 
--- Sessions table for authentication
+-- OTP storage table
+CREATE TABLE user_otps (
+    otp_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    otp_code VARCHAR(6) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    is_used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
 CREATE TABLE sessions (
     session_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
@@ -116,12 +129,8 @@ CREATE TABLE reports (
 -- DEMO DATA SEEDING
 -- -------------------
 
--- Users (password for all: password123)
-INSERT INTO users (username, password_hash, full_name, email, role) VALUES
-('admin', '$2b$10$rOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQV', 'System Administrator', 'admin@meditrack.com', 'admin'),
-('doctor1', '$2b$10$rOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQV', 'Dr. Sharma', 'sharma@meditrack.com', 'doctor'),
-('nurse1', '$2b$10$rOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQVqQVqQOzJqKqVQxnQV', 'Nurse Neha', 'neha@meditrack.com', 'nurse'),
-('reception1', '$2b$10$rOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQVqQVqQVqQOzJqKqVQxnQV', 'Reception Staff', 'reception@meditrack.com', 'receptionist');
+INSERT INTO users (username, email, password_hash, full_name, role, is_active, is_first_login) VALUES
+('admin', 'nesgvk@gmail.com', '$2a$10$3orfaFX/rxI8GAbcrro6keyf0Wkino5JN18hf30C3yzi5qO.9mmWW', 'System Administrator', 'admin', TRUE, FALSE);
 
 -- Doctors
 INSERT INTO doctors (name, specialization, contact) VALUES

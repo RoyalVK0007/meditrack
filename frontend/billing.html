@@ -6,46 +6,127 @@
     <meta name="page" content="billing">
     <meta name="page-title" content="Billing & Payments">
     <title>Billing - MediTrack</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="modern-style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div class="container">
-
-      <main class="content page-content">
-        <h2>Billing & Payments</h2>
-        <div class="controls">
-          <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search bills..." onkeyup="filterBills()">
-            <button onclick="clearSearch()" class="btn-clear">×</button>
-          </div>
-          <div class="sort-dropdown">
-            <button class="btn-secondary dropdown-btn" onclick="toggleSortDropdown()">Sort By <span class="dropdown-arrow">▼</span></button>
-            <div class="dropdown-content" id="sortDropdown">
-              <a href="#" onclick="sortTable('bill_id')">By Bill ID</a>
-              <a href="#" onclick="sortTable('patient_id')">By Patient</a>
-              <a href="#" onclick="sortTable('status')">By Status</a>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-center" style="width: 100%;">
+                        <h3 class="card-title">Billing & Payments</h3>
+                        <div class="flex gap-2">
+                            <button onclick="showCreateBillModal()" class="btn btn-primary">
+                                <span>+</span> Create New Bill
+                            </button>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <input type="text" id="searchInput" class="form-input" placeholder="Search bills..." onkeyup="filterBills()" style="width: 250px;">
+                            </div>
+                            <button onclick="showAuditLog()" class="btn btn-secondary">📅 Audit Log</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table" id="billingTable">
+                        <thead>
+                            <tr>
+                                <th>Bill ID</th>
+                                <th>Patient</th>
+                                <th>Room Charges</th>
+                                <th>Medicine</th>
+                                <th>Doctor Fee</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-          <button onclick="showAuditLog()" class="btn-audit">📅 Audit Log</button>
+        </main>
+    </div>
+
+    <div id="createBillModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateBillModal()">&times;</span>
+            <h3>Create New Bill</h3>
+            <form id="createBillForm">
+                <div class="form-group">
+                    <label for="patientSelect">Select Patient</label>
+                    <select id="patientSelect" required>
+                        <option value="">Choose a patient...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="roomCharges">Room Charges (₹)</label>
+                    <input type="number" id="roomCharges" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medicineCharges">Medicine Charges (₹)</label>
+                    <input type="number" id="medicineCharges" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorFee">Doctor Fee (₹)</label>
+                    <input type="number" id="doctorFee" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="totalAmount">Total Amount (₹)</label>
+                    <input type="number" id="totalAmount" readonly style="background: #f5f5f5;">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create Bill</button>
+            </form>
         </div>
-        <div class="table-container">
-          <table id="billingTable">
-            <thead>
-              <tr>
-                <th>Bill ID</th>
-                <th>Patient</th>
-                <th>Room Charges</th>
-                <th>Medicine</th>
-                <th>Doctor Fee</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+    </div>
+
+    <div id="viewEditBillModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeViewEditBillModal()">&times;</span>
+            <h3 id="billModalTitle">View Bill</h3>
+            <form id="viewEditBillForm">
+                <div class="form-group">
+                    <label>Bill ID</label>
+                    <input type="text" id="viewBillId" readonly style="background: #f5f5f5;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Patient</label>
+                    <input type="text" id="viewPatientName" readonly style="background: #f5f5f5;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="viewRoomCharges">Room Charges (₹)</label>
+                    <input type="number" id="viewRoomCharges" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="viewMedicineCharges">Medicine Charges (₹)</label>
+                    <input type="number" id="viewMedicineCharges" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="viewDoctorFee">Doctor Fee (₹)</label>
+                    <input type="number" id="viewDoctorFee" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="viewTotalAmount">Total Amount (₹)</label>
+                    <input type="number" id="viewTotalAmount" readonly style="background: #f5f5f5;">
+                </div>
+                
+                <div id="billActions" style="display: none;">
+                    <button type="button" onclick="updateBill()" class="btn btn-primary">Update Bill</button>
+                    <button type="button" onclick="cancelEdit()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
         </div>
-      </main>
     </div>
 
     <div id="auditLogModal" class="modal">

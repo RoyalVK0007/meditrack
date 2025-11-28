@@ -4,7 +4,7 @@ function checkAuth() {
     const userRole = localStorage.getItem('userRole');
     
     if (!token || !userRole) {
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
         return false;
     }
     
@@ -13,7 +13,7 @@ function checkAuth() {
 
 function logout() {
     localStorage.clear();
-    window.location.href = '/login.html';
+    window.location.href = 'login.html';
 }
 
 function updateUserInfo() {
@@ -38,7 +38,7 @@ function restrictAccess(allowedRoles) {
                 <p>You don't have permission to access this page.</p>
                 <p>Your role: <strong>${userRole}</strong></p>
                 <p>Required roles: <strong>${allowedRoles.join(', ')}</strong></p>
-                <button onclick="window.location.href='/dashboard.html'" style="padding: 10px 20px; margin-top: 20px;">Go to Dashboard</button>
+                <button onclick="window.location.href='dashboard.html'" style="padding: 10px 20px; margin-top: 20px;">Go to Dashboard</button>
             </div>
         `;
         return false;
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.clear();
-            window.location.href = '/login.html';
+            window.location.href = 'login.html';
         });
     }
 });

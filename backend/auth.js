@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const JWT_SECRET = 'meditrack_jwt_secret_key_2024';
-const JWT_EXPIRES_IN = '1h';
+const JWT_SECRET = process.env.JWT_SECRET || 'meditrack_jwt_secret_key_2024'; // Fallback for dev
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 
 // Hash password
 async function hashPassword(password) {
@@ -27,10 +27,10 @@ async function comparePassword(password, hash) {
 // Generate JWT token
 function generateToken(user) {
   return jwt.sign(
-    { 
-      user_id: user.user_id, 
-      username: user.username, 
-      role: user.role 
+    {
+      user_id: user.user_id,
+      username: user.username,
+      role: user.role
     },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN }

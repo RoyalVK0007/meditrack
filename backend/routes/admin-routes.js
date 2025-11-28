@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const pool = require('../db');
 const { hashPassword } = require('../auth');
 
@@ -23,13 +25,13 @@ async function addUser(req, res) {
   req.on('end', async () => {
     try {
       const data = JSON.parse(body);
-      console.log('Received data:', data);
+      console.log('👤 Creating new user:', data.username);
       
-      const { username, password, role, full_name, email } = data;
+      const { username, role } = data;
       
-      if (!username || !password || !full_name || !role) {
+      if (!username || !role) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'All fields are required' }));
+        res.end(JSON.stringify({ error: 'Username and role are required' }));
         return;
       }
       
@@ -41,16 +43,23 @@ async function addUser(req, res) {
         return;
       }
       
-      const password_hash = await hashPassword(password);
+      // Default password is 'password123'
+      const defaultPassword = 'password123';
+      const password_hash = await hashPassword(defaultPassword);
+      
       const [result] = await pool.query(
-        'INSERT INTO users (username, password_hash, full_name, role, email) VALUES (?, ?, ?, ?, ?)',
-        [username, password_hash, full_name, role, email || null]
+        'INSERT INTO users (username, password_hash, full_name, role, email, is_first_login) VALUES (?, ?, ?, ?, ?, TRUE)',
+        [username, password_hash, username, role, 'temp@temp.com']
       );
       
-      console.log('User created with ID:', result.insertId);
+      console.log('✅ User created with ID:', result.insertId);
+      console.log('📧 Default password set to: password123');
 
       res.writeHead(201, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'User added successfully' }));
+      res.end(JSON.stringify({ 
+        message: 'User created successfully. Default password is "password123"',
+        user_id: result.insertId
+      }));
     } catch (error) {
       console.error('Error adding user:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -159,4 +168,34 @@ async function updateUser(req, res) {
   });
 }
 
-module.exports = { getAllUsers, addUser, updateUser, deleteUser, getSystemStats };
+async function backupDatabase(req, res) {
+  try {
+    const tables = ['patients', 'vitals', 'medicines', 'prescriptions', 'bills', 'users'];
+    const snapshot = {};
+
+    for (const table of tables) {
+      const [rows] = await pool.query(`SELECT * FROM ${table}`);
+      snapshot[table] = rows;
+    }
+
+    const backupDir = path.join(__dirname, '..', '..', 'reports', 'backups');
+    fs.mkdirSync(backupDir, { recursive: true });
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const fileName = `meditrack-backup-${timestamp}.json`;
+    const filePath = path.join(backupDir, fileName);
+
+    fs.writeFileSync(filePath, JSON.stringify({
+      generated_at: new Date().toISOString(),
+      data: snapshot
+    }, null, 2));
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Backup completed successfully', file: fileName }));
+  } catch (error) {
+    console.error('Error creating backup:', error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: error.message }));
+  }
+}
+
+module.exports = { getAllUsers, addUser, updateUser, deleteUser, getSystemStats, backupDatabase };

@@ -25,7 +25,8 @@ async function addPatient(req, res) {
 
 // Edit patient details (Receptionist only)
 async function editPatient(req, res) {
-  const patientId = req.url.split('/')[4];
+  const urlParts = req.url.split('/');
+  const patientId = urlParts[urlParts.length - 1];
   let body = '';
   req.on('data', chunk => { body += chunk.toString(); });
   req.on('end', async () => {

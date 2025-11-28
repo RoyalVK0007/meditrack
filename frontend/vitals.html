@@ -6,26 +6,40 @@
     <meta name="page" content="vitals">
     <meta name="page-title" content="Vital Signs Monitoring">
     <title>Vitals - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-
-        <main class="content page-content">
-            <h2>Vital Signs Monitoring</h2>
-            <div class="vitals-form">
-                <select id="vitalPatientSelect">
-                    <option value="">Select Patient</option>
-                </select>
-                <input type="number" id="heartRate" placeholder="Heart Rate (bpm)">
-                <input type="text" id="bloodPressure" placeholder="Blood Pressure (120/80)">
-                <input type="number" id="temperature" placeholder="Temperature (°F)" step="0.1">
-                <input type="number" id="oxygenLevel" placeholder="Oxygen Level (%)">
-                <button onclick="addVital()" class="btn-primary">Record Vitals</button>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Record New Vitals</h3>
+                </div>
+                <div class="vitals-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <select id="vitalPatientSelect" class="form-input">
+                        <option value="">Select Patient</option>
+                    </select>
+                    <input type="number" id="heartRate" class="form-input" placeholder="Heart Rate (bpm)">
+                    <input type="text" id="bloodPressure" class="form-input" placeholder="Blood Pressure (120/80)">
+                    <input type="number" id="temperature" class="form-input" placeholder="Temperature (°F)" step="0.1">
+                    <input type="number" id="oxygenLevel" class="form-input" placeholder="Oxygen Level (%)">
+                    <button onclick="addVital()" class="btn btn-primary">Record Vitals</button>
+                </div>
             </div>
-            <div id="vitalsHistory"></div>
-            <div class="chart-container" id="vitalsChartContainer" style="display:none;">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Vitals History</h3>
+                </div>
+                <div id="vitalsHistory"></div>
+            </div>
+
+            <div class="card" id="vitalsChartContainer" style="display:none;">
+                <div class="card-header">
+                    <h3 class="card-title">Vitals Chart</h3>
+                </div>
                 <canvas id="patientVitalsChart"></canvas>
             </div>
         </main>

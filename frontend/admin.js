@@ -8,15 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadAdminStats() {
     try {
         const token = localStorage.getItem('jwtToken');
-        const patientsResponse = await fetch('/api/patients', {
+        const statsResponse = await fetch('/api/admin/stats', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        const patients = await patientsResponse.json();
-        document.getElementById('adminTotalPatients').textContent = patients.length;
         
-        document.getElementById('adminActiveUsers').textContent = '5';
-        document.getElementById('adminDbSize').textContent = '2.3 MB';
-        document.getElementById('adminLastBackup').textContent = new Date().toLocaleDateString();
+        if (!statsResponse.ok) throw new Error('Failed to load stats');
+        const stats = await statsResponse.json();
+        document.getElementById('adminTotalPatients').textContent = stats.totalPatients ?? 0;
+        document.getElementById('adminActiveUsers').textContent = stats.activeUsers ?? 0;
+        document.getElementById('adminDbSize').textContent = `${stats.totalVitals ?? 0} vitals`;
     } catch (error) {
         console.error('Error loading admin stats:', error);
         showAlert('Error loading admin stats', 'error');
@@ -51,9 +51,28 @@ async function seedDemoData() {
     }
 }
 
-function backupDatabase() {
-    showAlert('Database backup initiated', 'success');
-    document.getElementById('adminLastBackup').textContent = new Date().toLocaleDateString();
+async function backupDatabase() {
+    if (!confirm('Create a full database backup now?')) return;
+    try {
+        const token = localStorage.getItem('jwtToken');
+        document.getElementById('adminStatus').innerHTML = '<p>⏳ Creating backup...</p>';
+        const response = await fetch('/api/admin/backup', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+            await handleApiError(response, 'Backup failed');
+            document.getElementById('adminStatus').innerHTML = '';
+            return;
+        }
+        const result = await response.json();
+        showAlert('Backup completed successfully', 'success');
+        document.getElementById('adminStatus').innerHTML = `<p><strong>Backup File:</strong> ${result.file}</p>`;
+        document.getElementById('adminLastBackup').textContent = new Date().toLocaleDateString();
+    } catch (error) {
+        console.error('Error creating backup:', error);
+        showAlert('Error creating backup', 'error');
+    }
 }
 
 async function clearAllData() {
@@ -96,20 +115,21 @@ async function addUser(event) {
     const userData = {
         full_name: document.getElementById('userName').value.trim(),
         username: document.getElementById('userUsername').value.trim(),
-        password: document.getElementById('userPassword').value,
+        email: document.getElementById('userEmail').value.trim(),
         role: document.querySelector('input[name="userRole"]:checked')?.value
     };
     
     console.log('Form data:', userData);
     
-    if (!userData.full_name || !userData.username || !userData.password || !userData.role) {
+    if (!userData.full_name || !userData.username || !userData.email || !userData.role) {
         showAlert('Please fill all required fields', 'error');
-        console.log('Missing fields:', {
-            full_name: !userData.full_name,
-            username: !userData.username, 
-            password: !userData.password,
-            role: !userData.role
-        });
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userData.email)) {
+        showAlert('Please enter a valid email address', 'error');
         return;
     }
     

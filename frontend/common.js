@@ -5,19 +5,68 @@ function logout() {
     window.location.href = '/login.html';
 }
 
+async function handleApiError(response, fallbackMessage = 'Something went wrong') {
+    let errorMessage = fallbackMessage;
+    try {
+        const data = await response.json();
+        if (data?.error) {
+            errorMessage = data.error;
+        }
+    } catch (error) {
+        console.warn('Unable to parse error response', error);
+    }
+    showAlert(errorMessage, 'error');
+}
+
 function showAlert(message, type) {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type}`;
     alertDiv.textContent = message;
+    
+    // Base styles
+    let backgroundColor, textColor, borderColor;
+    switch(type) {
+        case 'success':
+            backgroundColor = '#10b981';
+            textColor = 'white';
+            borderColor = '#059669';
+            break;
+        case 'error':
+            backgroundColor = '#ef4444';
+            textColor = 'white';
+            borderColor = '#dc2626';
+            break;
+        case 'warning':
+            backgroundColor = '#f59e0b';
+            textColor = 'white';
+            borderColor = '#d97706';
+            break;
+        case 'info':
+            backgroundColor = '#3b82f6';
+            textColor = 'white';
+            borderColor = '#2563eb';
+            break;
+        default:
+            backgroundColor = '#6b7280';
+            textColor = 'white';
+            borderColor = '#4b5563';
+    }
+    
     alertDiv.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 9999;
         padding: 15px 20px;
-        border-radius: 5px;
+        border-radius: 8px;
         font-weight: 500;
+        background-color: ${backgroundColor};
+        color: ${textColor};
+        border: 1px solid ${borderColor};
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         animation: slideInRight 0.3s ease-out;
+        max-width: 400px;
+        word-wrap: break-word;
     `;
     
     document.body.appendChild(alertDiv);
@@ -29,8 +78,8 @@ function showAlert(message, type) {
 }
 
 // Add CSS animations for alerts
-const style = document.createElement('style');
-style.textContent = `
+const alertStyle = document.createElement('style');
+alertStyle.textContent = `
     @keyframes slideInRight {
         from { transform: translateX(100%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
@@ -40,11 +89,12 @@ style.textContent = `
         to { transform: translateX(100%); opacity: 0; }
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(alertStyle);
 
 // Page transition effect
 document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('.sidebar a');
+    const links = document.querySelectorAll('.app-sidebar a.nav-item');
+    if (!links.length) return;
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.href && this.href !== window.location.href) {

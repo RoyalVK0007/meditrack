@@ -6,22 +6,83 @@
     <meta name="page" content="medications">
     <meta name="page-title" content="Medication Management">
     <title>Medications - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="grid-two">
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Medicine Inventory</h3>
+                            <p class="card-subtitle">Track availability & add new medicines</p>
+                        </div>
+                    </div>
+                    <form id="addMedicineForm" class="form-grid">
+                        <label>
+                            <span>Medicine Name</span>
+                            <input type="text" id="medicineName" placeholder="e.g., Paracetamol" required>
+                        </label>
+                        <label>
+                            <span>Description</span>
+                            <textarea id="medicineDescription" rows="2" placeholder="Usage, dosage hints"></textarea>
+                        </label>
+                        <label>
+                            <span>Initial Stock</span>
+                            <input type="number" id="medicineStock" min="0" value="0" required>
+                        </label>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Add Medicine</button>
+                            <button type="reset" class="btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                    <div id="medicineList" class="list-stack"></div>
+                </section>
 
-        <main class="content page-content">
-            <h2>Medication Management</h2>
-            <div class="medication-grid">
-                <div class="med-inventory">
-                    <h3>Medicine Inventory</h3>
-                    <div id="medicineList"></div>
-                </div>
-                <div class="prescriptions">
-                    <h3>Active Prescriptions</h3>
-                    <div id="prescriptionList"></div>
-                </div>
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Prescriptions</h3>
+                            <p class="card-subtitle">Create or update patient prescriptions</p>
+                        </div>
+                    </div>
+                    <form id="prescriptionForm" class="form-grid">
+                        <input type="hidden" id="prescriptionId">
+                        <label>
+                            <span>Patient</span>
+                            <select id="prescriptionPatient" required></select>
+                        </label>
+                        <label>
+                            <span>Medicine</span>
+                            <select id="prescriptionMedicine" required></select>
+                        </label>
+                        <label>
+                            <span>Dosage</span>
+                            <input type="text" id="prescriptionDosage" placeholder="500mg" required>
+                        </label>
+                        <label>
+                            <span>Frequency</span>
+                            <input type="text" id="prescriptionFrequency" placeholder="2 times/day" required>
+                        </label>
+                        <div class="date-grid">
+                            <label>
+                                <span>Start Date</span>
+                                <input type="date" id="prescriptionStart">
+                            </label>
+                            <label>
+                                <span>End Date</span>
+                                <input type="date" id="prescriptionEnd">
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="savePrescriptionBtn">Save Prescription</button>
+                            <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
+                        </div>
+                    </form>
+                    <div id="prescriptionList" class="list-stack"></div>
+                </section>
             </div>
         </main>
     </div>

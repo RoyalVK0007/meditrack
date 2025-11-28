@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Time Setup - MediTrack</title>
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <!-- Setup Navbar -->
+    <nav class="login-navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <span class="navbar-logo">🏥</span>
+                <div class="navbar-text">
+                    <span class="navbar-title">MediTrack</span>
+                    <span class="navbar-subtitle">First Time Setup</span>
+                </div>
+            </div>
+            <div class="navbar-links">
+                <a href="login.html" class="navbar-link">← Back to Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-form-section setup-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo setup-icon">🚀</div>
+                    <h1 class="login-title">Welcome to MediTrack</h1>
+                    <p class="login-subtitle" id="setupSubtitle">Let's set up your account in 3 simple steps</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="setup-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="step-indicator active" id="stepIndicator1">
+                                <span class="step-number">1</span>
+                                <span class="step-label">Email</span>
+                            </div>
+                            <div class="step-indicator" id="stepIndicator2">
+                                <span class="step-number">2</span>
+                                <span class="step-label">Verify</span>
+                            </div>
+                            <div class="step-indicator" id="stepIndicator3">
+                                <span class="step-number">3</span>
+                                <span class="step-label">Password</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div id="step1" class="setup-step fade-in">
+                    <div class="step-header">
+                        <h3 class="step-title">📧 Enter Your Email Address</h3>
+                        <p class="step-description">We'll send you a verification code to confirm your email</p>
+                    </div>
+                    
+                    <form id="emailForm">
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <span class="label-icon">📧</span>
+                                Email Address
+                            </label>
+                            <input type="email" id="email" class="form-input" placeholder="Enter your work email address" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary login-btn">
+                            <span class="btn-text">Send Verification Code</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            
+                <div id="step2" class="setup-step" style="display: none;">
+                    <div class="step-header">
+                        <h3 class="step-title">✉️ Verify Your Email</h3>
+                        <p class="step-description">Enter the 6-digit code sent to <strong id="emailDisplay"></strong></p>
+                    </div>
+                    
+                    <form id="otpForm">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="label-icon">🔑</span>
+                                Verification Code
+                            </label>
+                            <div class="otp-inputs-container">
+                                <input type="text" class="otp-input" maxlength="1" data-index="0">
+                                <input type="text" class="otp-input" maxlength="1" data-index="1">
+                                <input type="text" class="otp-input" maxlength="1" data-index="2">
+                                <input type="text" class="otp-input" maxlength="1" data-index="3">
+                                <input type="text" class="otp-input" maxlength="1" data-index="4">
+                                <input type="text" class="otp-input" maxlength="1" data-index="5">
+                            </div>
+                            <input type="hidden" id="otp" required>
+                        </div>
+                        
+                        <div class="otp-timer">
+                            <span class="timer-icon">⏱️</span>
+                            <span id="countdown">Code expires in 5:00</span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary login-btn">
+                            <span class="btn-text">Verify Code</span>
+                            <span class="btn-icon">✓</span>
+                        </button>
+                    </form>
+                    
+                    <div class="resend-section">
+                        <p class="resend-text">Didn't receive the code?</p>
+                        <button id="resendBtn" class="resend-link" style="display: none;" onclick="resendOtp()">
+                            <span class="resend-icon">🔄</span>
+                            Resend Code
+                        </button>
+                    </div>
+                </div>
+            
+                <div id="step3" class="setup-step" style="display: none;">
+                    <div class="step-header">
+                        <h3 class="step-title">🔐 Create Your Password</h3>
+                        <p class="step-description">Choose a strong password to secure your account</p>
+                    </div>
+                    
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="newPassword" class="form-label">
+                                <span class="label-icon">🔑</span>
+                                New Password
+                            </label>
+                            <input type="password" id="newPassword" class="form-input" placeholder="Enter your new password" required>
+                            <div class="password-strength" id="passwordStrength"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">
+                                <span class="label-icon">🔒</span>
+                                Confirm Password
+                            </label>
+                            <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <div class="password-requirements">
+                            <h4>Password Requirements:</h4>
+                            <ul>
+                                <li id="req-length">• At least 4 characters</li>
+                                <li id="req-upper">• One uppercase letter (A-Z)</li>
+                                <li id="req-number">• One number (0-9)</li>
+                                <li id="req-match">• Passwords must match</li>
+                            </ul>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary login-btn setup-complete-btn">
+                            <span class="btn-text">Complete Setup</span>
+                            <span class="btn-icon">🎉</span>
+                        </button>
+                    </form>
+                </div>
+        </div>
+    </div>
+    
+    <script src="ui-enhancements.js"></script>
+    <script>
+        const username = localStorage.getItem('setupUsername');
+        if (!username) {
+            window.location.href = '/login.html';
+        }
+        
+        let userEmail = '';
+        
+        // Setup OTP inputs functionality
+        function setupOtpInputs() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    
+                    if (!/^[0-9]$/.test(value) && value !== '') {
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    if (value) {
+                        e.target.classList.add('filled');
+                        if (index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                    } else {
+                        e.target.classList.remove('filled');
+                    }
+                    
+                    updateOtpValue();
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                        otpInputs[index - 1].value = '';
+                        otpInputs[index - 1].classList.remove('filled');
+                        updateOtpValue();
+                    }
+                });
+            });
+        }
+        
+        function updateOtpValue() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const otpValue = Array.from(otpInputs).map(input => input.value).join('');
+            document.getElementById('otp').value = otpValue;
+        }
+        
+        function updateProgress(step) {
+            const progressFill = document.getElementById('progressFill');
+            const indicators = document.querySelectorAll('.step-indicator');
+            
+            // Update progress bar
+            progressFill.style.width = `${(step / 3) * 100}%`;
+            
+            // Update step indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.remove('active', 'completed');
+                if (index < step - 1) {
+                    indicator.classList.add('completed');
+                } else if (index === step - 1) {
+                    indicator.classList.add('active');
+                }
+            });
+        }
+        
+        function transitionToStep(fromStep, toStep) {
+            const fromElement = document.getElementById(`step${fromStep}`);
+            const toElement = document.getElementById(`step${toStep}`);
+            
+            fromElement.classList.add('slide-out-left');
+            
+            setTimeout(() => {
+                fromElement.style.display = 'none';
+                toElement.style.display = 'block';
+                toElement.classList.add('slide-in-right');
+                
+                setTimeout(() => {
+                    toElement.classList.add('show');
+                    updateProgress(toStep);
+                }, 50);
+            }, 300);
+        }
+        
+        // Step 1: Email submission
+        document.getElementById('emailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const submitBtn = e.target.querySelector('.login-btn');
+            
+            setButtonLoading(submitBtn, true);
+            
+            try {
+                const response = await fetch('/api/auth/setup-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email })
+                });
+                
+                if (response.ok) {
+                    userEmail = email;
+                    document.getElementById('emailDisplay').textContent = email;
+                    showSuccess('Verification code sent to your email!');
+                    
+                    setTimeout(() => {
+                        transitionToStep(1, 2);
+                        setupOtpInputs();
+                        startCountdown();
+                        document.querySelector('.otp-input').focus();
+                    }, 1000);
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Failed to send verification code');
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+            } finally {
+                setButtonLoading(submitBtn, false);
+            }
+        });
+        
+        // Step 2: OTP verification
+        document.getElementById('otpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('otp').value;
+            const submitBtn = e.target.querySelector('.login-btn');
+            
+            if (otp.length !== 6) {
+                showError('Please enter the complete 6-digit code');
+                return;
+            }
+            
+            setButtonLoading(submitBtn, true);
+            
+            try {
+                const response = await fetch('/api/auth/verify-setup-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, otp })
+                });
+                
+                if (response.ok) {
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.classList.add('otp-success');
+                    });
+                    
+                    showSuccess('Email verified successfully!');
+                    
+                    setTimeout(() => {
+                        transitionToStep(2, 3);
+                        setupPasswordValidation();
+                    }, 1000);
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Invalid verification code');
+                    
+                    // Clear OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    document.getElementById('otp').value = '';
+                    document.querySelector('.otp-input').focus();
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+            } finally {
+                setButtonLoading(submitBtn, false);
+            }
+        });
+        
+        function setupPasswordValidation() {
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            newPasswordInput.addEventListener('input', function() {
+                validatePasswordStrength(this.value);
+                validatePasswordMatch();
+            });
+            
+            confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+        }
+        
+        function validatePasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            const lengthReq = document.getElementById('req-length');
+            const upperReq = document.getElementById('req-upper');
+            const numberReq = document.getElementById('req-number');
+            
+            let strength = 0;
+            if (password.length >= 4) { strength++; lengthReq.classList.add('valid'); } else { lengthReq.classList.remove('valid'); }
+            if (/[A-Z]/.test(password)) { strength++; upperReq.classList.add('valid'); } else { upperReq.classList.remove('valid'); }
+            if (/[0-9]/.test(password)) { strength++; numberReq.classList.add('valid'); } else { numberReq.classList.remove('valid'); }
+            
+            const strengthClasses = ['', 'weak', 'fair', 'good', 'strong'];
+            strengthBar.className = 'password-strength ' + (strengthClasses[strength] || '');
+        }
+        
+        function validatePasswordMatch() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const matchReq = document.getElementById('req-match');
+            
+            if (newPassword && confirmPassword) {
+                matchReq.classList.toggle('valid', newPassword === confirmPassword);
+            }
+        }
+        
+        // Step 3: Password setup
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const submitBtn = e.target.querySelector('.login-btn');
+            
+            // Validate password
+            const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9]).{4,}$/;
+            if (!passwordRegex.test(newPassword)) {
+                showError('Password must contain uppercase letter, number, and be at least 4 characters');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            setButtonLoading(submitBtn, true);
+            
+            try {
+                const response = await fetch('/api/auth/complete-setup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email: userEmail, password: newPassword })
+                });
+                
+                if (response.ok) {
+                    localStorage.removeItem('setupUsername');
+                    
+                    // Show success animation
+                    document.getElementById('step3').innerHTML = `
+                        <div class="setup-success fade-in">
+                            <div class="success-icon">🎉</div>
+                            <h3 class="success-title">Setup Complete!</h3>
+                            <p class="success-message">Your account has been successfully created. You can now sign in to MediTrack.</p>
+                        </div>
+                    `;
+                    
+                    updateProgress(3);
+                    document.getElementById('setupSubtitle').textContent = 'Account setup completed successfully!';
+                    
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 3000);
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Setup failed. Please try again.');
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+            } finally {
+                setButtonLoading(submitBtn, false);
+            }
+        });
+        
+        function startCountdown() {
+            let timeLeft = 300; // 5 minutes
+            const countdownEl = document.getElementById('countdown');
+            const resendBtn = document.getElementById('resendBtn');
+            
+            resendBtn.style.display = 'none';
+            
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownEl.textContent = `Code expires in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 60) {
+                    countdownEl.style.color = 'var(--danger-color)';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = 'Code expired';
+                    countdownEl.classList.add('expired');
+                    resendBtn.style.display = 'block';
+                    
+                    // Disable OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.5';
+                    });
+                }
+                timeLeft--;
+            }, 1000);
+        }
+        
+        async function resendOtp() {
+            const resendBtn = document.getElementById('resendBtn');
+            const originalText = resendBtn.innerHTML;
+            
+            resendBtn.innerHTML = '<span class="resend-icon">🔄</span> Sending...';
+            resendBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/auth/setup-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email: userEmail })
+                });
+                
+                if (response.ok) {
+                    showSuccess('New verification code sent!');
+                    
+                    // Re-enable OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.disabled = false;
+                        input.style.opacity = '1';
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    document.getElementById('otp').value = '';
+                    
+                    startCountdown();
+                    document.querySelector('.otp-input').focus();
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Failed to resend code');
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+            } finally {
+                resendBtn.innerHTML = originalText;
+                resendBtn.disabled = false;
+            }
+        }
+        
+        // Helper functions
+        function showError(message) {
+            showToast(message, 'error');
+        }
+        
+        function showSuccess(message) {
+            showToast(message, 'success');
+        }
+        
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.classList.add('btn-loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('btn-loading');
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

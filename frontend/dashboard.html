@@ -6,96 +6,120 @@
     <meta name="page" content="dashboard">
     <meta name="page-title" content="Dashboard">
     <title>Dashboard - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-
         <main class="content page-content">
-            <h2>Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Patients</h3>
-                    <span id="totalPatients">0</span>
+            <!-- Admin Controls -->
+            <div id="adminControls" class="card" style="display: none;">
+                <div class="card-header">
+                    <h3 class="card-title">🔧 Admin Controls</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Admitted Today</h3>
-                    <span id="admittedToday">0</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Critical Alerts</h3>
-                    <span id="criticalAlerts">0</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Pending Bills</h3>
-                    <span id="pendingBills">0</span>
+                <div class="flex gap-2" style="flex-wrap: wrap;">
+                    <button onclick="window.location.href='admin.html'" class="btn btn-primary">👥 Manage Users</button>
+                    <button onclick="seedDemoData()" class="btn btn-primary" style="background-color: var(--success-color);">📊 Seed Demo Data</button>
+                    <button onclick="clearAllData()" class="btn btn-danger">🗑️ Clear All Data</button>
+                    <button onclick="generateReport()" class="btn btn-info" style="background-color: var(--info-color); color: white;">📋 Generate Report</button>
                 </div>
             </div>
-            <div class="dashboard-grid">
-                <div class="chart-container">
-                    <canvas id="vitalsChart"></canvas>
-                    <div class="info-card emergency-contacts">
-                        <h4>🆘 Emergency Contacts</h4>
-                        <div class="contact-grid">
-                            <div class="contact-item">
-                                <span class="contact-icon">🚑</span>
-                                <div>
-                                    <strong>Ambulance</strong><br>
-                                    <a href="tel:108">108</a>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <span class="contact-icon">🔥</span>
-                                <div>
-                                    <strong>Fire Brigade</strong><br>
-                                    <a href="tel:101">101</a>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <span class="contact-icon">👮</span>
-                                <div>
-                                    <strong>Police</strong><br>
-                                    <a href="tel:100">100</a>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <span class="contact-icon">⚕️</span>
-                                <div>
-                                    <strong>Poison Control</strong><br>
-                                    <a href="tel:1066">1066</a>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="fire-alarm-btn" onclick="triggerFireAlarm()">
-                            🚨 FIRE ALARM 🚨
-                        </button>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">⚡ Quick Actions</h3>
+                </div>
+                <div class="flex gap-2" style="flex-wrap: wrap;">
+                    <button onclick="quickAddPatient()" class="btn btn-primary">
+                        <span>👥</span> Add Patient
+                    </button>
+                    <button onclick="quickRecordVitals()" class="btn btn-primary">
+                        <span>💓</span> Record Vitals
+                    </button>
+                    <button onclick="window.location.href='medications.html'" class="btn btn-primary">
+                        <span>💊</span> Manage Medications
+                    </button>
+                    <button onclick="quickCreateBill()" class="btn btn-primary">
+                        <span>💰</span> Create Bill
+                    </button>
+                    <button onclick="window.location.href='reports.html'" class="btn btn-secondary">
+                        <span>📋</span> View Reports
+                    </button>
+                    <button onclick="window.location.href='profile.html'" class="btn btn-secondary">
+                        <span>👤</span> My Profile
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Patients</span>
+                    <span class="stat-value" id="totalPatients">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Admitted Today</span>
+                    <span class="stat-value" id="admittedToday">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Critical Alerts</span>
+                    <span class="stat-value" id="criticalAlerts" style="color: var(--danger-color);">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Pending Bills</span>
+                    <span class="stat-value" id="pendingBills">0</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                <!-- Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Patient Vitals Trends</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="vitalsChart"></canvas>
                     </div>
                 </div>
-                <div class="hospital-info">
-                    <h3>🏥 About MediTrack General Hospital</h3>
-                    <div class="info-card">
-                        <h4>📍 Location & Contact</h4>
-                        <p><strong>Address:</strong> 123 Healthcare Avenue, Medical District<br>
-                        Mumbai, Maharashtra 400001</p>
-                        <p><strong>Phone:</strong> +91-22-1234-5678<br>
-                        <strong>Email:</strong> info@meditrack.com</p>
+
+                <!-- Emergency & Info -->
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="card" style="border-left: 4px solid var(--danger-color);">
+                        <div class="card-header">
+                            <h3 class="card-title" style="color: var(--danger-color);">🆘 Emergency</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="text-center p-2 bg-red-50 rounded">
+                                <strong>🚑 Ambulance</strong><br>
+                                <a href="tel:108" class="text-danger font-bold">108</a>
+                            </div>
+                            <div class="text-center p-2 bg-red-50 rounded">
+                                <strong>🔥 Fire</strong><br>
+                                <a href="tel:101" class="text-danger font-bold">101</a>
+                            </div>
+                        </div>
+                        <button class="btn btn-danger mt-4" style="width: 100%;" onclick="triggerFireAlarm()">
+                            🚨 TRIGGER FIRE ALARM
+                        </button>
                     </div>
-                    <div class="info-card">
-                        <h4>🩺 Services</h4>
-                        <ul>
-                            <li>Emergency Care 24/7</li>
-                            <li>General Medicine</li>
-                            <li>Cardiology</li>
-                            <li>Surgery</li>
-                            <li>Pediatrics</li>
-                        </ul>
-                    </div>
-                    <div class="info-card">
-                        <h4>⏰ Operating Hours</h4>
-                        <p><strong>Emergency:</strong> 24/7<br>
-                        <strong>OPD:</strong> 8:00 AM - 8:00 PM<br>
-                        <strong>Visiting:</strong> 4:00 PM - 6:00 PM</p>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🏥 Hospital Info</h3>
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            <p class="mb-4">
+                                <strong>MediTrack General Hospital</strong><br>
+                                123 Healthcare Avenue<br>
+                                Mumbai, Maharashtra
+                            </p>
+                            <p>
+                                <strong>Emergency:</strong> 24/7<br>
+                                <strong>OPD:</strong> 8:00 AM - 8:00 PM
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -105,5 +129,12 @@
     <script src="auth.js"></script>
     <script src="common.js"></script>
     <script src="dashboard.js"></script>
+    <script>
+        // Simple logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>

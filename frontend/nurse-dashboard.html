@@ -4,50 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Dashboard - MediTrack</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏥 MediTrack Hospital System</h1>
-            <div class="user-info">
-                <span id="userRole">Nurse</span> | <button id="logoutBtn" class="btn-logout">Logout</button>
-            </div>
-        </header>
-
-        <nav class="sidebar">
-            <ul>
-                <li><a href="nurse-dashboard.html" class="active">📊 Dashboard</a></li>
-                <li><a href="patients.html">👥 Patients</a></li>
-                <li><a href="vitals.html">💓 Vitals</a></li>
-                <li><a href="medications.html">💊 Medications</a></li>
-            </ul>
-        </nav>
-
-        <main class="content page-content">
-            <h2>Nurse Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Assigned Patients</h3>
-                    <span id="assignedPatients">18</span>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Nurse Dashboard</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Vitals Due</h3>
-                    <span id="vitalsDue">5</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Medications Due</h3>
-                    <span id="medicationsDue">7</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Shift Hours</h3>
-                    <span id="shiftHours">6/8</span>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Assigned Patients</span>
+                        <span class="stat-value" id="assignedPatients">18</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Vitals Due</span>
+                        <span class="stat-value" id="vitalsDue">5</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Medications Due</span>
+                        <span class="stat-value" id="medicationsDue">7</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Shift Hours</span>
+                        <span class="stat-value" id="shiftHours">6/8</span>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="template.js"></script>
     <script src="auth.js"></script>
     <script src="common.js"></script>
+    <script src="nurse-dashboard.js"></script>
     <script>
         restrictAccess(['nurse']);
     </script>

@@ -5,7 +5,10 @@ let sortColumn = 'patient_id';
 let sortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadPatients();
+    // Delay loading to ensure template is ready
+    setTimeout(() => {
+        loadPatients();
+    }, 100);
     
     document.getElementById('patientForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -13,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!validateForm()) {
             return;
         }
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
         
         const patientId = document.getElementById('patientId').value;
         const patientData = {
@@ -24,12 +31,16 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         try {
+            const token = localStorage.getItem('jwtToken');
             const url = patientId ? `/api/patients/${patientId}` : '/api/patients';
             const method = patientId ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(patientData)
             });
             
@@ -47,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error saving patient:', error);
             showAlert('Error saving patient', 'error');
+        } finally {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
         }
     });
 });
@@ -54,17 +68,25 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadPatients() {
     try {
         const token = localStorage.getItem('jwtToken');
+        console.log('Loading patients with token:', token ? 'Present' : 'Missing');
+        
         const response = await fetch('/api/patients', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        patients = await response.json();
         
-        const tbody = document.querySelector('#patientsTable tbody');
-        tbody.innerHTML = '';
+        console.log('Response status:', response.status);
         
-        filteredPatients = [...patients];
-        sortPatients();
-        renderPatients();
+        if (response.ok) {
+            patients = await response.json();
+            console.log('Loaded patients:', patients.length);
+            
+            filteredPatients = [...patients];
+            sortPatients();
+            renderPatients();
+        } else {
+            console.error('Failed to load patients:', response.status);
+            showAlert('Failed to load patients', 'error');
+        }
         
     } catch (error) {
         console.error('Error loading patients:', error);
@@ -89,22 +111,64 @@ function closeViewModal() {
     document.getElementById('viewPatientModal').style.display = 'none';
 }
 
-function toggleSortDropdown() {
-    const dropdown = document.getElementById('sortDropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-}
-
-function sortTable(column) {
-    if (sortColumn === column) {
-        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-        sortColumn = column;
-        sortDirection = 'asc';
+function renderPatients() {
+    const tbody = document.querySelector('#patientsTable tbody');
+    console.log('Table tbody element:', tbody);
+    
+    if (!tbody) {
+        console.error('Table tbody not found');
+        return;
     }
-    sortPatients();
-    renderPatients();
-    updateDropdownText();
-    document.getElementById('sortDropdown').style.display = 'none';
+    
+    tbody.innerHTML = '';
+    console.log('Rendering patients:', filteredPatients.length);
+    console.log('Patient data:', filteredPatients);
+    console.log('Table visible?', tbody.offsetHeight > 0);
+    console.log('Table parent:', tbody.parentElement);
+    
+    if (filteredPatients.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #666;">No patients found</td></tr>';
+        return;
+    }
+    
+    filteredPatients.forEach((patient, index) => {
+        console.log(`Creating row ${index} for patient:`, patient);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${patient.patient_id}</td>
+            <td>${patient.name}</td>
+            <td>${patient.age}</td>
+            <td>${patient.gender}</td>
+            <td>${patient.contact}</td>
+            <td><span class="status ${patient.status ? patient.status.toLowerCase() : 'active'}">${patient.status || 'Active'}</span></td>
+            <td>
+                <button onclick="viewPatient(${patient.patient_id})" class="btn-secondary">View</button>
+                <button onclick="editPatient(${patient.patient_id})" class="btn-primary">Edit</button>
+                <button onclick="deletePatient(${patient.patient_id})" class="btn-danger">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+        console.log('Row added to tbody');
+    });
+    
+    console.log('Final tbody children count:', tbody.children.length);
+    
+    // Force table visibility with direct styles
+    const table = document.getElementById('patientsTable');
+    const tableContainer = table.closest('.table-container');
+    const mainContent = table.closest('.main-content');
+    
+    if (table) {
+        table.style.cssText = 'display: table !important; visibility: visible !important; opacity: 1 !important;';
+    }
+    if (tableContainer) {
+        tableContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
+    }
+    if (mainContent) {
+        mainContent.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
+    }
+    
+
 }
 
 function sortPatients() {
@@ -125,39 +189,6 @@ function sortPatients() {
     });
 }
 
-function renderPatients() {
-    const tbody = document.querySelector('#patientsTable tbody');
-    tbody.innerHTML = '';
-    
-    filteredPatients.forEach(patient => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${patient.patient_id}</td>
-            <td>${patient.name}</td>
-            <td>${patient.age}</td>
-            <td>${patient.gender}</td>
-            <td>${patient.contact}</td>
-            <td><span class="status ${patient.status.toLowerCase()}">${patient.status}</span></td>
-            <td>
-                <button onclick="viewPatient(${patient.patient_id})" class="btn-secondary">View</button>
-                <button onclick="editPatient(${patient.patient_id})" class="btn-primary">Edit</button>
-                <button onclick="deletePatient(${patient.patient_id})" class="btn-danger">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-function updateDropdownText() {
-    const columnNames = {
-        'patient_id': 'ID',
-        'name': 'Name', 
-        'status': 'Status'
-    };
-    const arrow = sortDirection === 'asc' ? '↑' : '↓';
-    document.querySelector('.dropdown-btn').innerHTML = `Sort By ${columnNames[sortColumn]} ${arrow} <span class="dropdown-arrow">▼</span>`;
-}
-
 function filterPatients() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     
@@ -168,25 +199,13 @@ function filterPatients() {
             patient.name.toLowerCase().includes(searchTerm) ||
             patient.patient_id.toString().includes(searchTerm) ||
             patient.contact.includes(searchTerm) ||
-            patient.status.toLowerCase().includes(searchTerm)
+            (patient.status && patient.status.toLowerCase().includes(searchTerm))
         );
     }
     
     sortPatients();
     renderPatients();
 }
-
-function clearSearch() {
-    document.getElementById('searchInput').value = '';
-    filterPatients();
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(event) {
-    if (!event.target.matches('.dropdown-btn')) {
-        document.getElementById('sortDropdown').style.display = 'none';
-    }
-});
 
 function viewPatient(patientId) {
     const patient = patients.find(p => p.patient_id === patientId);
@@ -221,11 +240,11 @@ function viewPatient(patientId) {
                 </div>
                 <div class="detail-row">
                     <span class="label">Admission Date:</span>
-                    <span class="value">${new Date(patient.admission_date).toLocaleDateString()}</span>
+                    <span class="value">${patient.admission_date ? new Date(patient.admission_date).toLocaleDateString() : 'N/A'}</span>
                 </div>
                 <div class="detail-row">
                     <span class="label">Status:</span>
-                    <span class="value status ${patient.status.toLowerCase()}">${patient.status}</span>
+                    <span class="value status ${patient.status ? patient.status.toLowerCase() : 'active'}">${patient.status || 'Active'}</span>
                 </div>
             </div>
         `;
@@ -245,7 +264,10 @@ function editPatient(patientId) {
         document.getElementById('patientGender').value = patient.gender;
         document.getElementById('patientContact').value = patient.contact;
         document.getElementById('patientAddress').value = patient.address;
+        clearValidationErrors();
         document.getElementById('addPatientModal').style.display = 'block';
+    } else {
+        showAlert('Patient not found', 'error');
     }
 }
 
@@ -283,34 +305,26 @@ function validateForm() {
     const contact = document.getElementById('patientContact').value.trim();
     const address = document.getElementById('patientAddress').value.trim();
     
-    // Name validation
     if (name.length < 2) {
         showFieldError('nameError', 'Name must be at least 2 characters');
         isValid = false;
-    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
-        showFieldError('nameError', 'Name can only contain letters and spaces');
-        isValid = false;
     }
     
-    // Age validation
     if (age < 1 || age > 120) {
         showFieldError('ageError', 'Age must be between 1 and 120');
         isValid = false;
     }
     
-    // Gender validation
     if (!gender) {
         showFieldError('genderError', 'Please select a gender');
         isValid = false;
     }
     
-    // Contact validation
     if (!/^[0-9]{10}$/.test(contact)) {
         showFieldError('contactError', 'Contact must be exactly 10 digits');
         isValid = false;
     }
     
-    // Address validation
     if (address.length < 5) {
         showFieldError('addressError', 'Address must be at least 5 characters');
         isValid = false;
@@ -320,7 +334,10 @@ function validateForm() {
 }
 
 function showFieldError(errorId, message) {
-    document.getElementById(errorId).textContent = message;
+    const element = document.getElementById(errorId);
+    if (element) {
+        element.textContent = message;
+    }
 }
 
 function clearValidationErrors() {
@@ -336,22 +353,17 @@ function logAudit(action, patientId, patientName) {
         action: action,
         patientId: patientId,
         patientName: patientName,
-        user: 'Current User' // In real app, get from session
+        user: localStorage.getItem('userName') || 'Current User'
     };
     
-    // Store in localStorage for demo
     let auditLog = JSON.parse(localStorage.getItem('auditLog') || '[]');
-    auditLog.unshift(auditEntry); // Add to beginning
+    auditLog.unshift(auditEntry);
     
-    // Keep only last 100 entries
     if (auditLog.length > 100) {
         auditLog = auditLog.slice(0, 100);
     }
     
     localStorage.setItem('auditLog', JSON.stringify(auditLog));
-    
-    // Send to server in real implementation
-    // fetch('/api/audit', { method: 'POST', body: JSON.stringify(auditEntry) });
 }
 
 function showAuditLog() {
@@ -378,13 +390,50 @@ function closeAuditModal() {
     document.getElementById('auditLogModal').style.display = 'none';
 }
 
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.textContent = message;
+    alertDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    if (type === 'success') {
+        alertDiv.style.backgroundColor = '#28a745';
+    } else if (type === 'error') {
+        alertDiv.style.backgroundColor = '#dc3545';
+    } else if (type === 'info') {
+        alertDiv.style.backgroundColor = '#17a2b8';
+    }
+    
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
+}
+
+// Close modals when clicking outside
 window.onclick = function(event) {
-    const modal = document.getElementById('addPatientModal');
+    const addModal = document.getElementById('addPatientModal');
+    const viewModal = document.getElementById('viewPatientModal');
     const auditModal = document.getElementById('auditLogModal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    
+    if (event.target === addModal) {
+        addModal.style.display = 'none';
+    }
+    if (event.target === viewModal) {
+        viewModal.style.display = 'none';
     }
     if (event.target === auditModal) {
         auditModal.style.display = 'none';
     }
-}
+};

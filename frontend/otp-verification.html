@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification - MediTrack</title>
+    <link rel="stylesheet" href="modern-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="login-page">
+    <!-- OTP Navbar -->
+    <nav class="login-navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <span class="navbar-logo">🏥</span>
+                <div class="navbar-text">
+                    <span class="navbar-title">MediTrack</span>
+                    <span class="navbar-subtitle">OTP Verification</span>
+                </div>
+            </div>
+            <div class="navbar-links">
+                <a href="login.html" class="navbar-link">← Back to Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-form-section otp-container show">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo pulse">📧</div>
+                    <h1 class="login-title">Verify Your Email</h1>
+                    <p class="login-subtitle" id="otpSubtitle">We've sent a 6-digit OTP to your email address</p>
+                </div>
+                
+                <div id="otpSection" class="fade-in">
+                    <form id="otpForm">
+                        <div class="form-group">
+                            <label for="otp" class="form-label">
+                                <span class="label-icon">🔑</span>
+                                Enter 6-Digit OTP
+                            </label>
+                            <div class="otp-inputs-container">
+                                <input type="text" class="otp-input" maxlength="1" data-index="0">
+                                <input type="text" class="otp-input" maxlength="1" data-index="1">
+                                <input type="text" class="otp-input" maxlength="1" data-index="2">
+                                <input type="text" class="otp-input" maxlength="1" data-index="3">
+                                <input type="text" class="otp-input" maxlength="1" data-index="4">
+                                <input type="text" class="otp-input" maxlength="1" data-index="5">
+                            </div>
+                            <input type="hidden" id="otp" required>
+                        </div>
+                        
+                        <div class="otp-timer">
+                            <span class="timer-icon">⏱️</span>
+                            <span>OTP expires in </span>
+                            <span id="countdown" class="countdown-time">5:00</span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary login-btn">
+                            <span class="btn-text">Verify OTP</span>
+                            <span class="btn-icon">✓</span>
+                        </button>
+                    </form>
+                    
+                    <div class="resend-section">
+                        <p class="resend-text">Didn't receive the code?</p>
+                        <button id="resendBtn" class="resend-link" style="display: none;" onclick="resendOtp()">
+                            <span class="resend-icon">🔄</span>
+                            Resend OTP
+                        </button>
+                    </div>
+                </div>
+
+                <div id="passwordSection" style="display: none;" class="fade-in">
+                    <div class="password-header">
+                        <div class="password-icon">🔐</div>
+                        <h3>Set New Password</h3>
+                        <p>Please create a secure password for your account</p>
+                    </div>
+                    
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="newPassword" class="form-label">
+                                <span class="label-icon">🔑</span>
+                                New Password
+                            </label>
+                            <input type="password" id="newPassword" class="form-input" minlength="6" placeholder="Enter new password" required>
+                            <div class="password-strength" id="passwordStrength"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">
+                                <span class="label-icon">🔒</span>
+                                Confirm Password
+                            </label>
+                            <input type="password" id="confirmPassword" class="form-input" minlength="6" placeholder="Confirm new password" required>
+                        </div>
+                        
+                        <div class="password-requirements">
+                            <h4>Password Requirements:</h4>
+                            <ul>
+                                <li id="req-length">• At least 6 characters</li>
+                                <li id="req-match">• Passwords must match</li>
+                            </ul>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary login-btn">
+                            <span class="btn-text">Set Password</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+        </div>
+    </div>
+
+    <script src="ui-enhancements.js"></script>
+    <script>
+        let userId = null;
+        let isFirstLogin = false;
+        let countdownTimer = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get user data from URL params or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            userId = urlParams.get('user_id') || localStorage.getItem('tempUserId');
+            isFirstLogin = urlParams.get('first_login') === 'true' || localStorage.getItem('tempFirstLogin') === 'true';
+
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            startCountdown();
+            setupForms();
+        });
+
+        function setupForms() {
+            document.getElementById('otpForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await verifyOtp();
+            });
+
+            document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await changePassword();
+            });
+
+            // Setup OTP inputs
+            setupOtpInputs();
+            
+            // Setup password validation
+            setupPasswordValidation();
+        }
+        
+        function setupOtpInputs() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    
+                    // Only allow numbers
+                    if (!/^[0-9]$/.test(value) && value !== '') {
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Add filled class
+                    if (value) {
+                        e.target.classList.add('filled');
+                        // Move to next input
+                        if (index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                    } else {
+                        e.target.classList.remove('filled');
+                    }
+                    
+                    // Update hidden input
+                    updateOtpValue();
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    // Handle backspace
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                        otpInputs[index - 1].value = '';
+                        otpInputs[index - 1].classList.remove('filled');
+                        updateOtpValue();
+                    }
+                    
+                    // Handle paste
+                    if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+                        setTimeout(() => {
+                            const pastedValue = e.target.value;
+                            if (pastedValue.length === 6 && /^[0-9]{6}$/.test(pastedValue)) {
+                                distributeOtpValue(pastedValue);
+                            }
+                        }, 10);
+                    }
+                });
+                
+                input.addEventListener('focus', function(e) {
+                    e.target.select();
+                });
+            });
+            
+            // Focus first input
+            otpInputs[0].focus();
+        }
+        
+        function updateOtpValue() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const otpValue = Array.from(otpInputs).map(input => input.value).join('');
+            document.getElementById('otp').value = otpValue;
+        }
+        
+        function distributeOtpValue(value) {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            for (let i = 0; i < 6; i++) {
+                otpInputs[i].value = value[i] || '';
+                if (value[i]) {
+                    otpInputs[i].classList.add('filled');
+                } else {
+                    otpInputs[i].classList.remove('filled');
+                }
+            }
+            updateOtpValue();
+        }
+        
+        function setupPasswordValidation() {
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            if (newPasswordInput) {
+                newPasswordInput.addEventListener('input', function() {
+                    validatePasswordStrength(this.value);
+                    validatePasswordMatch();
+                });
+            }
+            
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+            }
+        }
+        
+        function validatePasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            const lengthReq = document.getElementById('req-length');
+            
+            if (!strengthBar) return;
+            
+            let strength = 0;
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            const strengthClasses = ['', 'weak', 'fair', 'good', 'strong', 'very-strong'];
+            strengthBar.className = 'password-strength ' + (strengthClasses[strength] || '');
+            
+            // Update requirements
+            if (lengthReq) {
+                lengthReq.classList.toggle('valid', password.length >= 6);
+            }
+        }
+        
+        function validatePasswordMatch() {
+            const newPassword = document.getElementById('newPassword')?.value;
+            const confirmPassword = document.getElementById('confirmPassword')?.value;
+            const matchReq = document.getElementById('req-match');
+            
+            if (matchReq && newPassword && confirmPassword) {
+                matchReq.classList.toggle('valid', newPassword === confirmPassword);
+            }
+        }
+
+        async function verifyOtp() {
+            const otp = document.getElementById('otp').value.trim();
+            const submitBtn = document.querySelector('#otpForm .login-btn');
+            
+            if (otp.length !== 6) {
+                showError('Please enter a complete 6-digit OTP');
+                // Shake OTP inputs
+                document.querySelectorAll('.otp-input').forEach(input => {
+                    input.classList.add('error');
+                    setTimeout(() => input.classList.remove('error'), 500);
+                });
+                return;
+            }
+
+            console.log('Verifying OTP:', { user_id: userId, otp });
+            setButtonLoading(submitBtn, true);
+
+            try {
+                const response = await fetch('/api/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, otp })
+                });
+
+                const result = await response.json();
+                console.log('OTP verification response:', result);
+
+                if (response.ok) {
+                    clearInterval(countdownTimer);
+                    
+                    // Add success effect to OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.classList.add('otp-success');
+                    });
+                    
+                    showSuccess('OTP verified successfully!');
+                    
+                    setTimeout(() => {
+                        if (result.isFirstLogin) {
+                            // Transition to password section
+                            document.getElementById('otpSection').classList.add('fade-out');
+                            setTimeout(() => {
+                                document.getElementById('otpSection').style.display = 'none';
+                                document.getElementById('passwordSection').style.display = 'block';
+                                document.getElementById('otpSubtitle').textContent = 'Create a secure password for your account';
+                                document.querySelector('.login-logo').textContent = '🔐';
+                            }, 500);
+                        } else {
+                            // Login successful, redirect to dashboard
+                            localStorage.setItem('jwtToken', result.token);
+                            localStorage.setItem('userRole', result.user.role);
+                            localStorage.setItem('userName', result.user.full_name);
+                            
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 1500);
+                        }
+                    }, 1000);
+                } else {
+                    setButtonLoading(submitBtn, false);
+                    showError(result.error || 'Invalid OTP. Please try again.');
+                    // Clear OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    document.getElementById('otp').value = '';
+                    document.querySelector('.otp-input').focus();
+                }
+            } catch (error) {
+                console.error('OTP verification error:', error);
+                setButtonLoading(submitBtn, false);
+                showError('Verification failed. Please check your connection and try again.');
+            }
+        }
+
+        async function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showAlert('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, newPassword })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert('Password set successfully! Please login again.', 'success');
+                    setTimeout(() => {
+                        localStorage.removeItem('tempUserId');
+                        localStorage.removeItem('tempFirstLogin');
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Password change error:', error);
+                showAlert('Password change failed. Please try again.', 'error');
+            }
+        }
+
+        function startCountdown() {
+            let timeLeft = 300; // 5 minutes in seconds
+            const resendBtn = document.getElementById('resendBtn');
+            const countdownElement = document.getElementById('countdown');
+            
+            resendBtn.style.display = 'none';
+            countdownElement.classList.remove('expired');
+            
+            countdownTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Add warning color when less than 1 minute
+                if (timeLeft <= 60) {
+                    countdownElement.style.color = 'var(--danger-color)';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    countdownElement.textContent = 'EXPIRED';
+                    countdownElement.classList.add('expired');
+                    resendBtn.style.display = 'block';
+                    
+                    // Disable OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.5';
+                    });
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+        
+        async function resendOtp() {
+            const resendBtn = document.getElementById('resendBtn');
+            const originalText = resendBtn.innerHTML;
+            
+            resendBtn.innerHTML = '<span class="resend-icon">🔄</span> Sending...';
+            resendBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/auth/resend-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                if (response.ok) {
+                    showSuccess('New OTP sent to your email!');
+                    
+                    // Re-enable OTP inputs
+                    document.querySelectorAll('.otp-input').forEach(input => {
+                        input.disabled = false;
+                        input.style.opacity = '1';
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    document.getElementById('otp').value = '';
+                    
+                    // Restart countdown
+                    startCountdown();
+                    
+                    // Focus first input
+                    document.querySelector('.otp-input').focus();
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Failed to resend OTP. Please try again.');
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+            } finally {
+                resendBtn.innerHTML = originalText;
+                resendBtn.disabled = false;
+            }
+        }
+        
+        // Helper functions for consistent messaging
+        function showAlert(message, type = 'info') {
+            // Create alert element
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 6px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // Set background color based on type
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                info: '#3b82f6',
+                warning: '#f59e0b'
+            };
+            alert.style.backgroundColor = colors[type] || colors.info;
+            
+            alert.textContent = message;
+            document.body.appendChild(alert);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => alert.remove(), 300);
+            }, 4000);
+        }
+        
+        function showError(message) {
+            showAlert(message, 'error');
+        }
+        
+        function showSuccess(message) {
+            showAlert(message, 'success');
+        }
+        
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.classList.add('btn-loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('btn-loading');
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
